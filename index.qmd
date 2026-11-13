@@ -1,5 +1,5 @@
 ---
-title: "Testing the robustness of a published claim: the housing-audit case"
+title: "Testing the robustness of a published claim: the Housing and racial bias case study"
 author: "Pair: [names]"
 date: today
 format:
@@ -25,11 +25,11 @@ knitr:
 # readr::read_csv(). Run R/check_setup.R first if a package is missing on your
 # own laptop – it tells you which, and how to install them.
 
-# The one working object: the housing-audit data, one row per email.
-audit <- readr::read_csv("data/housing_audit.csv", show_col_types = FALSE)
+# The one working object: the Housing data, one row per email.
+housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
 
 # The helpers of Tasks 4 and 5. Every fit they make is a live fit of the
-# estimator of the course on the housing-audit data, and in Task 5 they read
+# estimator of the course on the Housing data, and in Task 5 they read
 # their choices from your preregistration.
 source("R/spec_tools.R")
 ```
@@ -40,9 +40,9 @@ In 2014 the original authors (OAs) emailed 1,017 public housing authorities in t
 
 > "Hispanic housing applicants were ... less likely to be greeted by name than were ... white counterparts" (Einstein and Glick 2017: 100)
 
-This is a sentence of their abstract as the SCORE programme selected it for the Multi100 project, which gave it to five analysts to test. The published estimate is −20.0 percentage points (95% CI −30.5 to −10.0): the change in the predicted probability of a greeting by name from a white to a Hispanic name, from a logistic regression with covariates.
+This is a sentence of their abstract as the SCORE programme selected it for its robustness study (Multi100; Aczel et al. 2026), which gave it to five analysts to test. The published estimate is −20.0 percentage points (95% CI −30.5 to −10.0): the change in the predicted probability of a greeting by name from a white to a Hispanic name, from a logistic regression with covariates.
 
-You have the public data of the OAs, the tools of the Multi100 analysts and the choices that they faced. You are analyst no. 6, and the question is how robust that gap is to *justifiable* alternative choices. Work through the five tasks below in order, from a setup check to two marks on the live class chart: an exploratory one from Task 4, and a declared one from Task 5, whose specification you fix in your preregistration before running it.
+You have the public data of the OAs, the tools of the analysts of the robustness study and the choices that they faced. You are analyst no. 6, and the question is how robust that gap is to *justifiable* alternative choices. Work through the five tasks below in order, from a setup check to two marks on the live class chart: an exploratory one from Task 4, and a declared one from Task 5, whose specification you fix in your preregistration before running it.
 
 ::: callout-tip
 ## How the tasks work
@@ -73,14 +73,14 @@ Every task is a callout box with instructions, a **TODO** for you to complete, a
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 2 – The data"}
-The **housing-audit data** (`housing_audit.csv`) hold one row per email. They are already loaded as `audit` in the setup chunk. The file is built from the public file of the OAs on Harvard Dataverse (doi:10.7910/DVN/1HOVTU, released under CC0), with plainer column names; `audit_original.csv`, which Task 3 uses, is that public file with its original names.
+The **Housing data** (`housing_emails.csv`) hold one row per email. They are already loaded as `housing` in the setup chunk. The file is built from the public file of the OAs on Harvard Dataverse (doi:10.7910/DVN/1HOVTU, released under CC0), with plainer column names; `housing_original.csv`, which Task 3 uses, is that public file with its original names.
 
 **TODO:** run the chunks, then read the figure. Which name received the fewest greetings by name? Note it in a comment.
 
 ```{r}
 #| label: count-emails
 # How many emails, and what came back?
-audit |>
+housing |>
   datawizard::data_summary(emails    = n(),
                            bounced   = sum(is.na(reply)),
                            delivered = sum(!is.na(reply)),
@@ -93,7 +93,7 @@ You should find **1,014 emails** (the paper reports 1,017, three more than the p
 ```{r}
 #| label: by-group
 # Replies and greetings by the group of the name
-audit |>
+housing |>
   datawizard::data_filter(!is.na(reply)) |>
   datawizard::data_summary(delivered   = n(),
                            replies     = sum(reply == 1),
@@ -108,7 +108,7 @@ audit |>
 #| fig-cap: "Replies that greeted the sender by name, by the name that signed the email."
 #| fig-height: 3.6
 # The share greeted by name for each of the six names, from the lowest
-greeted <- audit |>
+greeted <- housing |>
   datawizard::data_filter(!is.na(named)) |>
   datawizard::data_summary(greeted_pct = 100 * mean(named), by = c("group", "name")) |>
   datawizard::data_arrange("greeted_pct") |>
@@ -127,7 +127,7 @@ tinyplot::tinyplot(x = seq_len(nrow(greeted)), y = greeted$greeted_pct, flip = T
                    cex = 0.9, add = TRUE)
 ```
 
-The replies to white names greeted the sender by name in 61.1% of cases, those to Hispanic names in 41.2%: a gap of about 20 points, the size of the published estimate. Black names fall in between, at 56.1%. Every column is described in `data/housing_audit_codebook.md`.
+The replies to white names greeted the sender by name in 61.1% of cases, those to Hispanic names in 41.2%: a gap of about 20 points, the size of the published estimate. Black names fall in between, at 56.1%. Every column is described in `data/housing_emails_codebook.md`.
 :::
 
 ------------------------------------------------------------------------
@@ -183,9 +183,9 @@ The difference between these two comparisons is the decision on which emails are
 ------------------------------------------------------------------------
 
 ::::: {.callout-note title="Task 3 – The reproduction"}
-This is the **reproducibility** check. Five analysts reanalysed the claim for Multi100, each with code of their own, and Multi100 recorded a test statistic for four of them. **Choose one of the five** and reproduce the analysis from the public file of the OAs, `audit_original.csv`, which keeps their column names. `Response_Dichotomous` is 1 for a reply, 0 for none and empty for a bounced email. `ProperName` is the greeting by name, empty for every email that has no reply with a greeting code. `TreatmentGroup` holds the group and the sex of the name (`"Hispanic male"`, `"white female"` and so on).
+This is the **reproducibility** check. Five analysts reanalysed the claim for the robustness study, each with code of their own, and the robustness study recorded a test statistic for four of them. **Choose one of the five** and reproduce the analysis from the public file of the OAs, `housing_original.csv`, which keeps their column names. `Response_Dichotomous` is 1 for a reply, 0 for none and empty for a bounced email. `ProperName` is the greeting by name, empty for every email that has no reply with a greeting code. `TreatmentGroup` holds the group and the sex of the name (`"Hispanic male"`, `"white female"` and so on).
 
-| Analyst | What the analysis compared | Emails counted | Test | Recorded by Multi100 |
+| Analyst | What the analysis compared | Emails counted | Test | Recorded in the robustness study |
 |:--|:--|:--|:--|:--|
 | 8PTRZ | Hispanic names against all other names | the 558 replies with a greeting code | chi-square test of a 2 × 2 table | $\chi^2$ = 14.265 |
 | UYV3F | Hispanic against white names | the 362 coded replies to those names | logistic regression without covariates | z = −3.771 |
@@ -193,11 +193,11 @@ This is the **reproducibility** check. Five analysts reanalysed the claim for Mu
 | 25N5D | Hispanic against white names | the 665 delivered emails to those names, a missing reply counted as no greeting | two-proportion test | $\chi^2$ = 13.683 |
 | P9W8Y | the three groups | the 558 replies with a greeting code | likelihood-ratio test of a logistic regression | none |
 
-Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you chose line by line. When you have your value, type the analyst and the value into the chat, for example `UYV3F z = -3.771`, hold it, and send it on the facilitator's word. The four recorded statistics all come out exactly. For P9W8Y Multi100 recorded no statistic, so its analysis can be run again but there is nothing on record to match it against.
+Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you chose line by line. When you have your value, type the analyst and the value into the chat, for example `UYV3F z = -3.771`, hold it, and send it on the facilitator's word. The four recorded statistics all come out exactly. For P9W8Y the robustness study recorded no statistic, so its analysis can be run again but there is nothing on record to match it against.
 
 ```{r}
 #| label: reproduce-read
-original <- readr::read_csv("data/audit_original.csv", show_col_types = FALSE)
+original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 ```
 
 ::: {.panel-tabset}
@@ -292,7 +292,7 @@ nobs(m_p9w8y)
 anova(update(m_p9w8y, . ~ 1), m_p9w8y, test = "LRT")
 ```
 
-The column `Deviance` gives 15.951 on 2 degrees of freedom. Multi100 recorded no statistic for this analysis, so there is nothing on record to match it against; the report that the analyst filed for Task 2 gives the same value in its text.
+The column `Deviance` gives 15.951 on 2 degrees of freedom. The robustness study recorded no statistic for this analysis, so there is nothing on record to match it against; the report that the analyst filed for Task 2 gives the same value in its text.
 
 :::
 
@@ -306,13 +306,13 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails, correct = FALSE)
 
 Without the correction the statistics are 14.95 and 14.33. Neither changes the conclusion, but only the corrected values match the record, and the description "a chi-square test" fits both. The coding matters in the same way. The z of EWFMI is positive and that of UYV3F negative, although both describe Hispanic names greeted by name less often. A reproduction needs the code, or at least every default and every coding on which the code relied.
 
-The same steps are in `prep/reproduce_reanalyses.R` as a script. The scripts that the analysts submitted are on the OSF, in the Multi100 component of the paper (osf.io/38rsh), one sub-component for each analyst.
+The same steps are in `prep/reproduce_reanalyses.R` as a script. The scripts that the analysts submitted are on the OSF, in the component of the robustness study for the paper (osf.io/38rsh), one sub-component for each analyst.
 :::::
 
 ::: {.callout-note collapse="true" title="Reproduction and the five analysts"}
 You reproduced the value of the analyst whom you chose, and so did everyone else who chose the same analyst, because everyone ran the same code on the same file. That is why reproducibility is the cheapest of the three Rs to establish.
 
-The five Multi100 analysts each wrote their own code for this claim. Three concluded that the results were evidence for the claim and two that they were evidence neither for nor against it, although the four statistics that Multi100 recorded all come from gaps in the same direction. Part of the difference lies in the questions that each analyst chose to answer (which names to compare, which emails to count), and part in what each analyst took to count as evidence: one of the two who answered 'neither' found the gap but judged it substantially smaller than the published one. The [case study](https://codemoreh.github.io/ar4ds-housing/cases/housing/index.html) on the course site sets out what each analyst chose.
+The five analysts of the robustness study each wrote their own code for this claim. Three concluded that the results were evidence for the claim and two that they were evidence neither for nor against it, although the four statistics recorded in the robustness study all come from gaps in the same direction. Part of the difference lies in the questions that each analyst chose to answer (which names to compare, which emails to count), and part in what each analyst took to count as evidence: one of the two who answered 'neither' found the gap but judged it substantially smaller than the published one. The [background page](https://codemoreh.github.io/ar4ds-housing/cases/housing/index.html) on the course site sets out what each analyst chose.
 
 In Task 2 you named the quantity that you are after and drew the graph that shows what each comparison conditions on. In Task 4 you will find out how far the answer moves when the choices change.
 :::
@@ -330,7 +330,7 @@ This task is **exploratory**. Try several specifications, look at what each one 
 - `model` – a linear probability model, whose coefficient is the difference in proportions (`"lpm"`), or the logistic regression of the paper, reported as an average marginal effect (`"logit"`);
 - `adjust` – no covariates (`"none"`), the hard-to-find address (`"email"`), that and the size and poverty of the community (`"place"`), or those and its ethnic composition (`"place_ethnic"`), all in the thirds of the public file.
 
-The printout gives the shares greeted by name in the two groups, the difference in percentage points with its 95% interval, the test of the model (a *t* with HC2 standard errors for the linear model, the *z* of the logit coefficient for the logit), the number of emails analysed, the partial *r* by the conversion rule of Multi100, the class of the result, and its place among the 64 specifications on the curve.
+The printout gives the shares greeted by name in the two groups, the difference in percentage points with its 95% interval, the test of the model (a *t* with HC2 standard errors for the linear model, the *z* of the logit coefficient for the logit), the number of emails analysed, the partial *r* by the conversion rule of the robustness study, the class of the result, and its place among the 64 specifications on the curve.
 
 **TODO:** run the six calls below and the refused one after them, then write your own. Three or four of your own is plenty.
 :::
@@ -396,7 +396,7 @@ Make one choice on each decision of the menu, complete the dotted lines, then ru
 # MY PREREGISTRATION – one specification, declared before seeing its result
 # ============================================================================
 # 1. The claim I am testing: .................................................
-# 2. The data + what I already know: housing_audit.csv (1,014 emails, public,
+# 2. The data + what I already know: housing_emails.csv (1,014 emails, public,
 #    CC0); I know that the reference specification gives -19.97 points, and
 #    what my exploration in Task 4 showed.
 # 3. My one specification – one choice on each decision. An option that is
@@ -496,7 +496,7 @@ Each of these runs in this workspace if you have time to spare.
 
 - **Sweep a whole decision.** `purrr::walk(c("none", "email", "place", "place_ethnic"), \(a) try_spec(adjust = a))` fits the four adjustment sets in one go, and `my_experiments()` then prints them side by side. The same call works for any decision on which the curve keeps more than one option.
 
-- **The five analysts on the curve.** `data/reference_marks.csv` places the published result, by its published change in predicted probability, and the five Multi100 analyses, each by a course refit on the public data, in percentage points (`b_pp`); keep the rows with `on_chart` TRUE other than `SCORE`, which places the replication on new data. Add them to the figure above as horizontal lines with `geom_hline()`, and find where the analysis of 25N5D, the only one to count every delivered email, falls among the 64.
+- **The five analysts on the curve.** `data/reference_marks.csv` places the published result, by its published change in predicted probability, and the five analyses of the robustness study, each by a course refit on the public data, in percentage points (`b_pp`); keep the rows with `on_chart` TRUE other than `SCORE`, which places the replication on new data. Add them to the figure above as horizontal lines with `geom_hline()`, and find where the analysis of 25N5D, the only one to count every delivered email, falls among the 64.
 
 - **A second test.** Every row of `data/spec_curve.csv` also carries `p_ri`, the p-value of a randomisation test that reshuffles the names among the analysed emails 1,999 times. Compare it with `p`, the test of the model. Because the names were assigned at random, the reshuffling reproduces the design of the experiment itself.
 

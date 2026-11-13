@@ -33,5 +33,5 @@ this material for any purpose, provided you give appropriate credit.
 
 The data in data/ come from the replication package of the original study on
 Harvard Dataverse (doi:10.7910/DVN/1HOVTU), which is released under CC0:
-audit_original.csv is its public data file, and housing_audit.csv and the
+housing_original.csv is its public data file, and housing_emails.csv and the
 other files in data/ are derived from it.

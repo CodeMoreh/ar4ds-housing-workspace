@@ -1,8 +1,8 @@
 ##############################################################################
 # Title:        reproduce_reanalyses.R – the reproductions of Task 3
-# Purpose:      Reproduce the five Multi100 reanalyses of the claim from the
+# Purpose:      Reproduce the five reanalyses of the claim in the robustness study from the
 #               public file of the original authors, each with the value that
-#               Multi100 recorded: 8PTRZ (chi-square = 14.265 on 558 replies),
+#               the robustness study recorded: 8PTRZ (chi-square = 14.265 on 558 replies),
 #               UYV3F (z = -3.771 on 362), EWFMI (z = 3.645 on 549) and 25N5D
 #               (chi-square = 13.683 on 665 emails); P9W8Y has no recorded
 #               statistic, and its likelihood-ratio test gives 15.951 on 2 df.
@@ -10,14 +10,14 @@
 #               (R/housing/03_reference_marks.R in the course repository). The
 #               scripts of the analysts are on the OSF (all five under
 #               osf.io/38rsh) and are not copied here.
-# Reads:        data/audit_original.csv (the public file of the original
+# Reads:        data/housing_original.csv (the public file of the original
 #               authors, Harvard Dataverse doi:10.7910/DVN/1HOVTU, CC0)
 # Writes:       – (prints the tests)
 # Author:       Chris Moreh
 # Last updated: 2026-10-27
 ##############################################################################
 
-original <- readr::read_csv("data/audit_original.csv", show_col_types = FALSE)
+original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 
 # Response_Dichotomous is 1 for a reply, 0 for none and missing for the 23
 # bounced emails. ProperName is 1 when the reply greeted the sender by name, 0
@@ -78,7 +78,7 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails, correct = FALSE)  # X-squ
 
 # ---- P9W8Y: a test of three groups -------------------------------------------
 # The three groups among the coded replies, and the likelihood-ratio test of
-# the groups against a model without them. Multi100 recorded no statistic for
+# the groups against a model without them. The robustness study recorded no statistic for
 # this analysis, so there is nothing on record to match; the report that the
 # analyst filed gives chi-square = 15.951 on 2 df.
 replies_p9w8y <- original |>

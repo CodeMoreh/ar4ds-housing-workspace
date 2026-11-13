@@ -1,6 +1,6 @@
 ##############################################################################
 # Title:        spec_tools.R – explore, preregister, fit and report
-# Purpose:      The estimator of the housing-audit case and the helpers that
+# Purpose:      The estimator of the Housing case study and the helpers that
 #               the report and the working script use, in two groups.
 #
 #               EXPLORATORY (Task 4): try_spec() fits any specification on
@@ -32,9 +32,9 @@
 # ============================================================================
 # The results Form that submit_exploration() and report_result() pre-fill: its
 # ID and the entry codes of its seven fields. They belong to the Form that the
-# housing-audit case shares with the EU-frames course; a Form of its own
+# Housing case study shares with the Europeanisation case study; a Form of its own
 # replaces them here and nowhere else. The word in .case_word follows the tag
-# in every label, so that the chart of this case reads only its own rows.
+# in every label, so that the chart of this case study reads only its own rows.
 .form_id <- "1FAIpQLSezoAEOnZUfP4pkfN28_XtEBwSyc2RLsXB-h8RPSegF7_t76A"
 .form_entry <- c(spec = "entry.832496914", b = "entry.1656311800", se = "entry.1337458262",
                  t = "entry.1940779437", df = "entry.1682711955", n = "entry.1586392724",
@@ -77,8 +77,8 @@ ADJUST_TERMS <- list(
 
 # The analysed rows and the outcome of one specification. Bounced emails never
 # reached an official and are outside the experiment under every option.
-spec_frame <- function(audit, comparison = "white", population = "replies", uncoded = "drop") {
-  audit |>
+spec_frame <- function(housing, comparison = "white", population = "replies", uncoded = "drop") {
+  housing |>
     dplyr::filter(!is.na(reply),
                   .env$comparison == "nonhispanic" | group %in% c("white", "hispanic"),
                   .env$population == "all" | reply == 1) |>
@@ -91,11 +91,11 @@ spec_frame <- function(audit, comparison = "white", population = "replies", unco
     dplyr::filter(!is.na(y))
 }
 
-# The conversion rules of Multi100 (standard_correlation_coefficient.R in
+# The conversion rules of the robustness study (standard_correlation_coefficient.R in
 # github.com/marton-balazs-kovacs/multi100): t with its df, which is the rule of
 # effectsize::t_to_r(); z with the sample size standing in for the missing df;
 # a chi-square read as the square of a z, so it carries no sign.
-r_multi100 <- function(stat, stat_type, df, n) {
+r_robustness <- function(stat, stat_type, df, n) {
   dplyr::case_when(
     stat_type == "t" ~ effectsize::t_to_r(stat, df, ci = NULL)$r,
     stat_type == "z" ~ tanh(abs(stat) * sqrt(1 / (n - 3))) * sign(stat),
@@ -117,14 +117,14 @@ check_spec <- function(comparison, population, uncoded, model, adjust) {
 # One specification: estimate in percentage points (negative = Hispanic names
 # greeted by name less often, the direction of the claim), its SE and 95%
 # interval, the test of the model that the specification fits, and the partial
-# correlation by the Multi100 rule.
-fit_spec <- function(audit, comparison = "white", population = "replies", uncoded = "drop",
+# correlation by the rule of the robustness study.
+fit_spec <- function(housing, comparison = "white", population = "replies", uncoded = "drop",
                      model = "lpm", adjust = "none") {
   check_spec(comparison, population, uncoded, model, adjust)
   terms <- ADJUST_TERMS[[adjust]]
   # only the model columns, and only the emails with every covariate;
   # marginaleffects refuses a data column called `group`
-  frame <- spec_frame(audit, comparison, population, uncoded) |>
+  frame <- spec_frame(housing, comparison, population, uncoded) |>
     dplyr::select("y", "hisp", dplyr::all_of(terms)) |>
     stats::na.omit()
   form <- stats::reformulate(c("hisp", terms), response = "y")
@@ -158,7 +158,7 @@ fit_spec <- function(audit, comparison = "white", population = "replies", uncode
     b_pp = 100 * est$b, se_pp = 100 * est$se,
     coef = test$coef, coef_se = test$coef_se,
     stat_type = test$stat_type, stat = test$stat, df = test$df, p = test$p,
-    r = r_multi100(test$stat, test$stat_type, test$df, nrow(frame)),
+    r = r_robustness(test$stat, test$stat_type, test$df, nrow(frame)),
     n = nrow(frame), n_hisp = sum(frame$hisp == 1), n_comp = sum(frame$hisp == 0),
     rate_hisp = 100 * mean(frame$y[frame$hisp == 1]),
     rate_comp = 100 * mean(frame$y[frame$hisp == 0]),
@@ -217,14 +217,14 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
   }
   .cache[[name]]
 }
-.audit   <- function() .read_once("audit", "data/housing_audit.csv")
+.housing   <- function() .read_once("housing", "data/housing_emails.csv")
 .curve   <- function() .read_once("curve", "data/spec_curve.csv")
 .options <- function() .read_once("options", "data/menu_options.csv")
 
 
 # ---- Pages of the course site ----------------------------------------------------
 .pages <- c(
-  "cases/housing/index.qmd"       = "Case study",
+  "cases/housing/index.qmd"       = "Background",
   "cases/housing/menu.qmd"        = "Specification menu",
   "cases/housing/map.qmd"         = "Decision map",
   "cases/housing/multiverse.qmd"  = "Multiverse",
@@ -304,7 +304,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
 # fit is checked against its row of data/spec_curve.csv; a difference means
 # that a file in data/ has been edited.
 .result <- function(ch) {
-  fit <- fit_spec(.audit(), ch$comparison, ch$population, ch$uncoded, ch$model, ch$adjust) |>
+  fit <- fit_spec(.housing(), ch$comparison, ch$population, ch$uncoded, ch$model, ch$adjust) |>
     as.list()
   curve <- .curve()
   stored <- dplyr::filter(curve, .data$comparison == ch$comparison, .data$population == ch$population,
@@ -356,7 +356,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
     sprintf("  Difference: %.2f percentage points, 95%% interval %.2f to %.2f",
             res$b_pp, res$ci_low, res$ci_high),
     test,
-    sprintf("  n = %d %s, partial r = %.3f (the conversion rule of Multi100)", res$n, unit, res$r),
+    sprintf("  n = %d %s, partial r = %.3f (the conversion rule of the robustness study)", res$n, unit, res$r),
     paste0("  Verdict: ", .class_line(res)),
     sprintf("  On the curve: %d of the %d specifications have an estimate further below zero",
             res$further, res$n_curve)))
@@ -531,10 +531,10 @@ report_result <- function(nickname = NULL) {
 }
 
 # One submission, used by both phases. The phase, the tag and the word of the
-# case are prefixed to the free-text spec label, which carries the five
+# case study are prefixed to the free-text spec label, which carries the five
 # decisions that vary on the curve. The estimate and its standard error are
 # sent in percentage points, the statistic of the model in the t field (a z
-# for a logit, whose df field stays empty), and r by the rule of Multi100.
+# for a logit, whose df field stays empty), and r by the rule of the robustness study.
 .submit <- function(ch, res, phase, lead, nickname = NULL) {
   tg <- .class_tag(nickname)
   spec_label <- paste0(phase, ": [", tg$tag, "] ", .case_word, " ",

@@ -35,7 +35,7 @@ sys_out <- function(cmd, args) {
   if (length(out) == 0) "" else trimws(paste(out, collapse = " "))
 }
 
-writeLines("\n=== Replication lab, the housing-audit case – setup check ===\n")
+writeLines("\n=== Replication lab, the Housing and racial bias case study – setup check ===\n")
 
 # --- 1. R version -----------------------------------------------------------
 if (getRversion() >= "4.4.0") {
@@ -74,12 +74,12 @@ if (length(missing) == 0) {
 
 # --- 4. data files present and readable -------------------------------------
 # The report renders offline because these ship inside the workspace.
-# housing_audit.csv is the course file that Tasks 2, 4 and 5 use, and
-# audit_original.csv the public file of the original authors, on which Task 3
-# reproduces a Multi100 result. R/spec_tools.R reads the curve of 64
+# housing_emails.csv is the course file that Tasks 2, 4 and 5 use, and
+# housing_original.csv the public file of the original authors, on which Task 3
+# reproduces a result of the robustness study. R/spec_tools.R reads the curve of 64
 # specifications and the reasons for the options that are not on it. The last
-# two hold the five Multi100 analyses and the reference marks of the curve.
-data_files <- c("data/housing_audit.csv", "data/audit_original.csv", "data/spec_curve.csv",
+# two hold the five analyses of the robustness study and the reference marks of the curve.
+data_files <- c("data/housing_emails.csv", "data/housing_original.csv", "data/spec_curve.csv",
                 "data/menu_options.csv", "data/analysts5.csv", "data/reference_marks.csv")
 for (f in data_files) { # r-style: keep – each pass prints one check line
   if (!file.exists(f)) {
@@ -111,7 +111,7 @@ if (length(missing) == 0 && all(file.exists(data_files[c(1, 3)])) && file.exists
   check <- tryCatch({
     sys.source("R/spec_tools.R", envir = tools)
     curve <- utils::read.csv("data/spec_curve.csv") # r-style: keep – the stored curve, read in base R
-    list(live = get("fit_spec", envir = tools)(get(".audit", envir = tools)())$b_pp,
+    list(live = get("fit_spec", envir = tools)(get(".housing", envir = tools)())$b_pp,
          stored = curve$b_pp[curve$is_reference])
   }, error = function(e) list(live = NA_real_, stored = NA_real_, msg = conditionMessage(e)))
   if (isTRUE(abs(check$live - check$stored) < 1e-9)) {

@@ -1,13 +1,13 @@
 ##############################################################################
-# Title:        Working script – the housing-audit exercise, plain R
+# Title:        Working script – the exercise of the Housing case study, plain R
 # Purpose:      Tasks 1 to 5 of index.qmd, as a script you can step through in
 #               the console: check the setup, look at the emails and draw the
-#               causal graph, reproduce one of the five Multi100 reanalyses
+#               causal graph, reproduce one of the five reanalyses of the robustness study
 #               (the four with a recorded statistic come out exactly), explore
 #               the specification menu, then preregister one specification and
 #               fit and report it. Every fit is live and takes a moment.
-# Reads:        data/housing_audit.csv (the 1,014 emails of the course file);
-#               data/audit_original.csv (the public file of the original
+# Reads:        data/housing_emails.csv (the 1,014 emails of the course file);
+#               data/housing_original.csv (the public file of the original
 #               authors); through R/spec_tools.R, data/spec_curve.csv (the
 #               curve of 64, for the place of each fit) and
 #               data/menu_options.csv (the reason for every option that is not
@@ -27,7 +27,7 @@ source("R/check_setup.R")
 # Every function is written with the package that it comes from, as in
 # readr::read_csv(). The one working object, and the helpers that explore,
 # preregister, fit and report a specification.
-audit <- readr::read_csv("data/housing_audit.csv", show_col_types = FALSE)
+housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
 source("R/spec_tools.R")
 
 ## ---- Task 2: the emails, the estimand and the graph ----------------------
@@ -35,7 +35,7 @@ source("R/spec_tools.R")
 # One row per email: 1,014 emails, 23 of which bounced. reply is missing for a
 # bounced email, and named is recorded for replies only (five replies carry no
 # greeting code).
-audit |>
+housing |>
   datawizard::data_summary(emails    = n(),
                            bounced   = sum(is.na(reply)),
                            delivered = sum(!is.na(reply)),
@@ -44,7 +44,7 @@ audit |>
 
 # By group of names: the replies, and the greetings by name among the coded
 # replies.
-audit |>
+housing |>
   datawizard::data_filter(!is.na(reply)) |>
   datawizard::data_summary(delivered   = n(),
                            replies     = sum(reply == 1),
@@ -71,10 +71,10 @@ dagitty::paths(dag, Z = c("reply", "community"))
 
 # Choose one of the five analysts and run their section. Each reproduces the
 # analysis from the public file of the original authors, with the value that
-# Multi100 recorded beside it. When you have your value, type the analyst and
+# the robustness study recorded beside it. When you have your value, type the analyst and
 # the value into the chat, for example "UYV3F z = -3.771", and send it on the
 # facilitator's word.
-original <- readr::read_csv("data/audit_original.csv", show_col_types = FALSE)
+original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 
 # 8PTRZ: Hispanic against all other names among the 558 replies with a
 # greeting code, a chi-square test of the 2 x 2 table. Recorded: 14.265.
@@ -122,7 +122,7 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails)                   # X-squ
 prop.test(counts_25n5d$greetings, counts_25n5d$emails, correct = FALSE)  # X-squared = 14.334
 
 # P9W8Y: the three groups among the 558 coded replies, a likelihood-ratio
-# test of the groups. Multi100 recorded no statistic, so there is nothing to
+# test of the groups. The robustness study recorded no statistic, so there is nothing to
 # match; the report of the analyst gives chi-square = 15.951 on 2 df.
 replies_p9w8y <- original |>
   datawizard::data_filter(!is.na(ProperName)) |>

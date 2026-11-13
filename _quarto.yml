@@ -7,7 +7,7 @@ project:
     - index.qmd
 
 website:
-  title: "Replication lab – the housing-audit case"
+  title: "Replication lab – Housing and racial bias"
 
 # freeze: auto means a whole-project render re-runs a document (every chunk in it)
 # only when its source file has changed. The committed _freeze/ folder lets
