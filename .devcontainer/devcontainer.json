@@ -1,5 +1,5 @@
 {
-  "name": "replication-lab-housing (R + Quarto)",
+  "name": "ar4ds-housing-workspace (R + Quarto)",
   "image": "ghcr.io/rocker-org/devcontainer/r-ver:4",
   "features": {
     "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {

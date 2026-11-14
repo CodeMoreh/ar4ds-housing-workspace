@@ -2,7 +2,7 @@
 #
 # One-time setup by you: repository Settings -> Pages -> Source: "GitHub Actions".
 # After that, every push to main rebuilds the site and your report appears at
-# https://<your-username>.github.io/replication-lab-housing/
+# https://<your-username>.github.io/ar4ds-housing-workspace/
 #
 # Why this installs R (unlike a freeze-only workflow): you will edit the code
 # chunks, so CI must be able to RE-RUN them. We install R + the package list,

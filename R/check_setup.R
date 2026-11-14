@@ -35,7 +35,7 @@ sys_out <- function(cmd, args) {
   if (length(out) == 0) "" else trimws(paste(out, collapse = " "))
 }
 
-writeLines("\n=== Replication lab, the Housing and racial bias case study – setup check ===\n")
+writeLines("\n=== AR4DS workspace, the Housing and racial bias case study – setup check ===\n")
 
 # --- 1. R version -----------------------------------------------------------
 if (getRversion() >= "4.4.0") {

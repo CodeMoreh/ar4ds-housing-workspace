@@ -1,4 +1,4 @@
-# Replication lab – Housing and racial bias
+# AR4DS workspace – Housing and racial bias
 
 ## About this workspace
 
@@ -12,11 +12,11 @@ The report you build is `index.qmd`. It renders out of the box: the data ship in
 
 This workspace is a plain folder, with no version control and no account to sign in to. You download it, unzip it, and work inside it.
 
-1.  **Download the workspace.** On the GitHub page of the template, click the green **Code** button, then **Download ZIP** – or use the direct link `https://github.com/CodeMoreh/replication-lab-housing/archive/refs/heads/main.zip`. Save it somewhere you own (Desktop or Documents).
+1.  **Download the workspace.** On the GitHub page of the template, click the green **Code** button, then **Download ZIP** – or use the direct link `https://github.com/CodeMoreh/ar4ds-housing-workspace/archive/refs/heads/main.zip`. Save it somewhere you own (Desktop or Documents).
 
-2.  **Unzip it.** Extract the ZIP to a real folder (on Windows, "Extract All" – do not work inside the compressed preview). You will get a folder called `replication-lab-housing-main` containing `index.qmd`, `data/`, `R/`, and this file.
+2.  **Unzip it.** Extract the ZIP to a real folder (on Windows, "Extract All" – do not work inside the compressed preview). You will get a folder called `ar4ds-housing-workspace-main` containing `index.qmd`, `data/`, `R/`, and this file.
 
-3.  **Open the folder in your IDE.** In Positron or VS Code, **File → Open Folder…** and pick the unzipped folder; in RStudio, open `replication-lab-housing.Rproj`, which sits inside it. (Positron is the one that the walkthrough uses on the shared screen; any of the three works for every step.)
+3.  **Open the folder in your IDE.** In Positron or VS Code, **File → Open Folder…** and pick the unzipped folder; in RStudio, open `ar4ds-housing-workspace.Rproj`, which sits inside it. (Positron is the one that the walkthrough uses on the shared screen; any of the three works for every step.)
 
 4.  **Check the packages.** This workspace has no lockfile that pins package versions. Instead, `R/check_setup.R` checks what is installed and lists what is missing. In the R console:
 
@@ -40,7 +40,7 @@ This workspace is a plain folder, with no version control and no account to sign
 
 This folder is kept free of git for the session. There is nothing to commit or push and no account to set up, so everyone in the class can get to the analysis in minutes, whatever their machine.
 
-The workspace *came from* a GitHub repository (`CodeMoreh/replication-lab-housing`), and putting your own work under version control – and publishing the rendered report to a live URL – is the natural take-home step. The course site has a self-study companion module that goes through it click by click: **Git and GitHub for reproducible research** at <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders already in this workspace set up that route once the folder is a repository again. You can ignore them for the session.
+The workspace *came from* a GitHub repository (`CodeMoreh/ar4ds-housing-workspace`), and putting your own work under version control – and publishing the rendered report to a live URL – is the natural take-home step. The course site has a self-study companion module that goes through it click by click: **Git and GitHub for reproducible research** at <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders already in this workspace set up that route once the folder is a repository again. You can ignore them for the session.
 
 ------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ The tasks in `index.qmd` map to the learning objectives of the day:
 
 ## Notes for the repository maintainer
 
-This workspace is published as the "Use this template" repository `CodeMoreh/replication-lab-housing`. Two folders serve the take-home and publishing route:
+This workspace is published as the "Use this template" repository `CodeMoreh/ar4ds-housing-workspace`. Two folders serve the take-home and publishing route:
 
 - `.devcontainer/devcontainer.json` – a Codespaces / dev-container image (R + Quarto + the package list) so the repository can be opened and rendered in the cloud with no local install.
 - `.github/workflows/publish.yml` – renders the report and publishes it to GitHub Pages on every push, once **Settings → Pages → Source** is set to **"GitHub Actions"**. It installs R and re-runs the chunks, so the edits of a participant show up.
