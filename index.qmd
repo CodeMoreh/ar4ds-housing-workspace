@@ -47,7 +47,7 @@ You have the public data of the OAs, the tools of the analysts of the robustness
 ::: callout-tip
 ## How the tasks work
 
-Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code. The course site also has a browser version of this exercise, which the facilitator drives on the shared screen and which stands in if your machine fails. This workspace is the full pipeline, worked in an IDE (Positron, RStudio, VS Code, etc.).
+Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code. The course site carries the same exercise in the browser: on the slides of the workshop, which run R inside the browser and on which the facilitator shows each step, and in the browser lab, which holds the same tasks on a page. Both stand in if your machine fails. This workspace is the full pipeline, worked in an IDE (Positron, RStudio, VS Code, etc.).
 :::
 
 ------------------------------------------------------------------------

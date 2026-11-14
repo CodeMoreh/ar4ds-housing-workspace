@@ -135,7 +135,8 @@ if (.results$fail == 0) {
   writeLines(c("\nSome checks failed. Two options:",
                " 1. Fix the FAILs above (each line says how), then re-run this script.",
                "    The help page on the course site lists the common failures and fixes.",
-               " 2. Come anyway – the browser lab runs the same exercise inside a web",
-               "    browser, and you can work through the rest on a partner's laptop.",
+               " 2. Come anyway – the slides of the day and the browser lab run the same",
+               "    exercise inside a web browser, and you can work through the rest on",
+               "    a partner's laptop.",
                ""))
 }
