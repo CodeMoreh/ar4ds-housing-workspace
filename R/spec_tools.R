@@ -226,15 +226,15 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
 .pages <- c(
   "cases/housing/index.qmd"       = "Background",
   "cases/housing/menu.qmd"        = "Specification menu",
-  "cases/housing/map.qmd"         = "Decision map",
-  "cases/housing/multiverse.qmd"  = "Multiverse",
+  "cases/housing/menu.qmd#map"    = "Decision map",
+  "cases/housing/curve.qmd"       = "Specification curve",
   "companion/experiments.qmd"     = "Audit experiments",
   "companion/binary-outcomes.qmd" = "Binary outcomes",
   "companion/dags.qmd"            = "Causal graphs and conditioning",
   "companion/multiverse.qmd"      = "The multiverse and its critics")
 .page_ref <- function(path) {
   title <- if (path %in% names(.pages)) .pages[[path]] else path
-  sprintf("%s, %s/%s", title, .course_url, sub("\\.qmd$", ".html", path))
+  sprintf("%s, %s/%s", title, .course_url, sub(".qmd", ".html", path, fixed = TRUE))
 }
 .or_list <- function(x) {
   q <- paste0("\"", x, "\"")
@@ -253,7 +253,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
 .refuse <- function(axis, v, as_args) {
   shown <- if (as_args) axis else paste0("my_", axis)
   keep  <- .menu[[axis]]
-  map   <- paste0("  Every decision and its options: ", .page_ref("cases/housing/map.qmd"))
+  map   <- paste0("  Every decision and its options: ", .page_ref("cases/housing/menu.qmd#map"))
   if (!is.character(v) || length(v) != 1 || is.na(v))
     stop(sprintf("%s needs one option in quotes, for example %s = \"%s\".", shown, shown, keep[1]),
          call. = FALSE)
@@ -564,7 +564,7 @@ report_result <- function(nickname = NULL) {
     "",
     sprintf("Your marks on the class chart carry the tag %s%s.", tg$tag,
             if (!is.null(tg$replaced)) sprintf(" (it replaces %s)", tg$replaced) else ""),
-    sprintf("Look for it on the Multiverse page, %s/cases/housing/multiverse.html.", .course_url),
+    sprintf("Look for it on the Class results page, %s/cases/housing/class-results.html.", .course_url),
     "Both of your submissions share it. To choose your own, pass nickname = \"...\"",
     "– pick a nickname rather than your name, because the chart is public."))
   invisible(list(spec = spec_label, tag = tg$tag, b = res$b_pp, se = res$se_pp, statistic = res$stat,

@@ -62,7 +62,7 @@ The tasks in `index.qmd` map to the learning objectives of the day:
 ## Links
 
 - **Course site:** https://codemoreh.github.io/ar4ds-housing/
-- **Submit your results:** `submit_exploration()` in Task 4 and `report_result()` in Task 5 each print a link to a pre-filled Google Form; open it and press **Send**, and the result appears on the live multiverse chart at https://codemoreh.github.io/ar4ds-housing/cases/housing/multiverse.html
+- **Submit your results:** `submit_exploration()` in Task 4 and `report_result()` in Task 5 each print a link to a pre-filled Google Form; open it and press **Send**, and the result appears on the live class chart at https://codemoreh.github.io/ar4ds-housing/cases/housing/class-results.html
 - **Take-home git/GitHub path:** https://codemoreh.github.io/ar4ds/git-github.html
 - **The data:** the replication package of the original study on Harvard Dataverse, https://doi.org/10.7910/DVN/1HOVTU (CC0).
 - **The five analyses of the robustness study:** the component of the robustness study for the paper on the OSF, https://osf.io/38rsh/, with one sub-component per analyst: 8PTRZ https://osf.io/j8wvh/, UYV3F https://osf.io/3672s/ (a review document only), EWFMI https://osf.io/jhvca/, 25N5D https://osf.io/v8zah/ and P9W8Y https://osf.io/pzwbm/.
