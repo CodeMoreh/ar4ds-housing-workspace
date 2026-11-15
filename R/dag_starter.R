@@ -9,7 +9,7 @@
 #               switch on. Then ask dagitty which paths from the name to the
 #               greeting stay open when the comparison is made among replies.
 # Author:       Chris Moreh
-# Last updated: 2026-10-26
+# Last updated: 2026-11-15
 # Sourced by:   index.qmd and working_script.R (Task 2)
 ##############################################################################
 
@@ -25,32 +25,22 @@
 #                Comparing replies only conditions on it, and conditioning on a
 #                collider opens a path between its causes.
 
-# Where each node sits in the figure: the name on the left, the greeting on
-# the right, the reply above the line between them. dagitty counts y
-# downwards, so the heights are stored with their signs reversed. A node that
-# you add without a position here is drawn on a row below the graph.
-.dag_xy <- list(name = c(0, 0), reply = c(1.5, 1.6), greeting = c(3, 0),
-                community = c(2, 0.65), official = c(3, 1.6))
-
-# A dagitty graph from arrows written "cause -> effect", one per string. The
-# named arguments come last, so that switching off the last arrow with a #
-# never leaves a comma dangling.
-make_dag <- function(..., exposure = "name", outcome = "greeting", latent = "official") {
-  arrows <- c(...)
-  nodes <- unique(c(exposure, outcome, trimws(unlist(strsplit(arrows, "->|<-")))))
-  declare <- purrr::map_chr(nodes, \(v) {
-    tags <- c(if (v %in% exposure) "exposure",
-              if (v %in% outcome) "outcome",
-              if (v %in% latent) "latent",
-              if (v %in% names(.dag_xy))
-                sprintf("pos=\"%s,%s\"", .dag_xy[[v]][1], -.dag_xy[[v]][2]))
-    if (length(tags) == 0) v else sprintf("%s [%s]", v, paste(tags, collapse = ","))
-  })
-  dagitty::dagitty(paste0("dag {\n", paste(c(declare, arrows), collapse = "\n"), "\n}"))
-}
-
 # ---- The graph -------------------------------------------------------------
-dag <- make_dag(
+# A dagitty graph from its model string, one statement to a line: first the
+# variables, with the roles that the questions of the report need and the
+# place of each in the figure (the name on the left, the greeting on the
+# right, the reply above the line between them; dagitty counts y downwards, so
+# the heights carry a minus sign), then the arrows, each written
+# "cause -> effect". The lines are joined into one string, so that a # in
+# front of a line switches its arrow off. A variable that you add in an arrow
+# alone is drawn on a row below the graph.
+dag <- c(
+  "dag {",
+  'name [exposure,pos="0,0"]',
+  'greeting [outcome,pos="3,0"]',
+  'reply [pos="1.5,-1.6"]',
+  'official [latent,pos="3,-1.6"]',
+  'community [pos="2,-0.65"]',
   # The name can affect whether the official replies at all.
   "name -> reply",
   # Only a reply can greet the sender by name.
@@ -70,15 +60,18 @@ dag <- make_dag(
   # source this file again, and rerun the checks in the report.
   # "name -> greeting",
 
-  exposure = "name", outcome = "greeting", latent = "official"
-)
+  "}"
+) |>
+  paste(collapse = "
+") |>
+  dagitty::dagitty()
 
 # ---- The figure ------------------------------------------------------------
 # Colour marks the exposure and the outcome, and the official, whom nobody
 # observed, is drawn pale. Each arrow stops near the edge of the box of its
 # target, which is sized from the length of the name. Drawn with tinyplot
 # (McDermott, Arel-Bundock and Zeileis; CRAN, doi:10.32614/CRAN.package.tinyplot).
-plot_dag <- function(d = dag) {
+plot_dag <- function(d = dag) {  # r-style: approved
   xy <- dagitty::coordinates(d)
   nodes <- tibble::tibble(name = names(xy$x), x = unname(xy$x), y = -unname(xy$y)) |>
     dplyr::mutate(
@@ -92,7 +85,7 @@ plot_dag <- function(d = dag) {
                                      .default = "observed"),
                     levels = c("exposure", "outcome", "observed", "unobserved")))
   # how far along a unit vector (ux, uy) the edge of a box of half-width w lies
-  to_edge <- \(ux, uy, w) pmin(w / pmax(abs(ux), 1e-9), 0.15 / pmax(abs(uy), 1e-9))
+  to_edge <- \(ux, uy, w) pmin(w / pmax(abs(ux), 1e-9), 0.15 / pmax(abs(uy), 1e-9))  # r-style: approved
   tails <- dplyr::select(nodes, from = "name", x0 = "x", y0 = "y", w0 = "half_w")
   heads <- dplyr::select(nodes, to = "name", x1 = "x", y1 = "y", w1 = "half_w")
   arrows <- dagitty::edges(d) |>

@@ -1,6 +1,6 @@
 # Codebook: `housing_emails.csv`
 
-The course file of the Housing and racial bias case study: one row per email of the field experiment reported in "Does Race Affect Access to Government Services? An Experiment Exploring Street-Level Bureaucrats and Access to Public Housing" (*American Journal of Political Science* 61 (1), 2017, doi:10.1111/ajps.12252), whose authors the course calls the original authors (OAs). It holds 1,014 rows, with readable names and the columns that the exercises use. It is written by `R/housing/01_email_data.R` from the public file of the OAs, and it keeps the rows of that file in the same order, so that row *i* here is row *i* of `housing_original.csv` ([codebook](housing_original_codebook.md)).
+The course file of the Housing and racial bias case study: one row per email of the field experiment reported in "Does Race Affect Access to Government Services? An Experiment Exploring Street-Level Bureaucrats and Access to Public Housing" (*American Journal of Political Science* 61 (1), 2017, doi:10.1111/ajps.12252), whose authors the course calls the original authors (OAs). It holds 1,014 rows, with readable names and the columns that the exercises use. It is written by `R/01_email_data.R` from the public file of the OAs, and it keeps the rows of that file in the same order, so that row *i* here is row *i* of `housing_original.csv` ([codebook](housing_original_codebook.md)).
 
 ## Sources and construction
 

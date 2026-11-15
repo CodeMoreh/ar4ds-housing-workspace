@@ -7,14 +7,14 @@
 #               (chi-square = 13.683 on 665 emails); P9W8Y has no recorded
 #               statistic, and its likelihood-ratio test gives 15.951 on 2 df.
 #               The same functions compute the refits of the course pipeline
-#               (R/housing/03_reference_marks.R in the course repository). The
+#               (R/03_reference_marks.R in the course repository). The
 #               scripts of the analysts are on the OSF (all five under
 #               osf.io/38rsh) and are not copied here.
 # Reads:        data/housing_original.csv (the public file of the original
 #               authors, Harvard Dataverse doi:10.7910/DVN/1HOVTU, CC0)
 # Writes:       – (prints the tests)
 # Author:       Chris Moreh
-# Last updated: 2026-10-27
+# Last updated: 2026-11-15
 ##############################################################################
 
 original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)

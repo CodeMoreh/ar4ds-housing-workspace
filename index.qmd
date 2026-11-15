@@ -47,7 +47,7 @@ You have the public data of the OAs, the tools of the analysts of the robustness
 ::: callout-tip
 ## How the tasks work
 
-Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code. The course site carries the same exercise in the browser: on the slides of the workshop, which run R inside the browser and on which the facilitator shows each step, and in the browser lab, which holds the same tasks on a page. Both stand in if your machine fails. This workspace is the full pipeline, worked in an IDE (Positron, RStudio, VS Code, etc.).
+Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code. The course site carries the same exercise in the browser: on the slides, which run R inside the browser and on which the facilitator shows each step, and in the browser lab, which holds the same tasks on a page. Both stand in if your machine fails. This workspace is the full pipeline, worked in an IDE (Positron, RStudio, VS Code, etc.).
 :::
 
 ------------------------------------------------------------------------
@@ -141,7 +141,7 @@ Before estimating, say *precisely* what you are estimating. An estimand has two 
 
 *(A defensible filling: a reply that greets the sender by name; a white name; the public housing authorities that received an email. The catch is that an authority whose official would not reply to one of the names has no greeting to compare. The comparison can then count every delivered email, a missing reply counting as no greeting, or count the replies only, which compares the authorities that replied to Hispanic names with those that replied to white names. These need not be the same authorities.)*
 
-A causal graph makes that catch visible. `R/dag_starter.R` builds the graph with `make_dag()`, one arrow per line, each written the way it is drawn: `"name -> reply"` is the arrow from the name to the reply. The name can affect whether the official replies, and only a reply can greet the sender by name. Something about the official that nobody recorded (workload, habits of courtesy, attitudes) affects both whether they reply and how they greet, and so does the community of the housing authority. One arrow is switched off with a `#`: the arrow from the name to the greeting, which is the effect on tone that the claim is about.
+A causal graph makes that catch visible. `R/dag_starter.R` builds the graph with `dagitty::dagitty()` from a model string with one arrow per line, each written the way it is drawn: `"name -> reply"` is the arrow from the name to the reply. The name can affect whether the official replies, and only a reply can greet the sender by name. Something about the official that nobody recorded (workload, habits of courtesy, attitudes) affects both whether they reply and how they greet, and so does the community of the housing authority. One arrow is switched off with a `#`: the arrow from the name to the greeting, which is the effect on tone that the claim is about.
 
 ```{r}
 #| label: fig-dag
@@ -312,7 +312,7 @@ The same steps are in `prep/reproduce_reanalyses.R` as a script. The scripts tha
 ::: {.callout-note collapse="true" title="Reproduction and the five analysts"}
 You reproduced the value of the analyst whom you chose, and so did everyone else who chose the same analyst, because everyone ran the same code on the same file. That is why reproducibility is the cheapest of the three Rs to establish.
 
-The five analysts of the robustness study each wrote their own code for this claim. Three concluded that the results were evidence for the claim and two that they were evidence neither for nor against it, although the four statistics recorded in the robustness study all come from gaps in the same direction. Part of the difference lies in the questions that each analyst chose to answer (which names to compare, which emails to count), and part in what each analyst took to count as evidence: one of the two who answered 'neither' found the gap but judged it substantially smaller than the published one. The [background page](https://codemoreh.github.io/ar4ds-housing/cases/housing/index.html) on the course site sets out what each analyst chose.
+The five analysts of the robustness study each wrote their own code for this claim. Three concluded that the results were evidence for the claim and two that they were evidence neither for nor against it, although the four statistics recorded in the robustness study all come from gaps in the same direction. Part of the difference lies in the questions that each analyst chose to answer (which names to compare, which emails to count), and part in what each analyst took to count as evidence: one of the two who answered 'neither' found the gap but judged it substantially smaller than the published one. The [background page](https://codemoreh.github.io/ar4ds-housing/background.html) on the course site sets out what each analyst chose.
 
 In Task 2 you named the quantity that you are after and drew the graph that shows what each comparison conditions on. In Task 4 you will find out how far the answer moves when the choices change.
 :::
@@ -443,7 +443,7 @@ run_spec(my_spec)
 
 Read the output like an analyst. The difference is in percentage points, and a value below zero means that replies to Hispanic names greeted the sender by name less often, the direction of the claim. Whether it is significant is decided by the test of the model, and the line headed `Verdict:` says which of the four cases your result falls in. The last line places it among the 64 specifications of the curve.
 
-Now submit it to the class chart. There is nothing to fill in and nothing to transcribe: `report_result()` refits your preregistered specification, builds the spec label, and prints your submission line and a pre-filled form link. Open it and press **Send**. Your mark appears on the live [class chart](https://codemoreh.github.io/ar4ds-housing/cases/housing/class-results.html) within seconds, this time as a filled circle labelled **declared**, with the same tag as your exploratory result.
+Now submit it to the class chart. There is nothing to fill in and nothing to transcribe: `report_result()` refits your preregistered specification, builds the spec label, and prints your submission line and a pre-filled form link. Open it and press **Send**. Your mark appears on the live [class chart](https://codemoreh.github.io/ar4ds-housing/class-results.html) within seconds, this time as a filled circle labelled **declared**, with the same tag as your exploratory result.
 
 ```{r}
 #| label: report
