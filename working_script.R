@@ -81,7 +81,7 @@ original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 coded_replies <- original |>
   datawizard::data_filter(!is.na(ProperName)) |>
   datawizard::data_modify(hispanic_name = grepl("^Hispanic", TreatmentGroup))
-tab_8ptrz <- xtabs(~ hispanic_name + ProperName, data = coded_replies)  # r-style: keep – the table that chisq.test() takes
+tab_8ptrz <- xtabs(~ hispanic_name + ProperName, data = coded_replies)
 tab_8ptrz
 chisq.test(tab_8ptrz)                    # X-squared = 14.265, with the continuity correction
 chisq.test(tab_8ptrz, correct = FALSE)   # X-squared = 14.952, without it

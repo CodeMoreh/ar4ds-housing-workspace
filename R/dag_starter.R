@@ -71,7 +71,7 @@ dag <- c(
 # observed, is drawn pale. Each arrow stops near the edge of the box of its
 # target, which is sized from the length of the name. Drawn with tinyplot
 # (McDermott, Arel-Bundock and Zeileis; CRAN, doi:10.32614/CRAN.package.tinyplot).
-plot_dag <- function(d = dag) {  # r-style: approved
+plot_dag <- function(d = dag) {
   xy <- dagitty::coordinates(d)
   nodes <- tibble::tibble(name = names(xy$x), x = unname(xy$x), y = -unname(xy$y)) |>
     dplyr::mutate(
@@ -85,7 +85,7 @@ plot_dag <- function(d = dag) {  # r-style: approved
                                      .default = "observed"),
                     levels = c("exposure", "outcome", "observed", "unobserved")))
   # how far along a unit vector (ux, uy) the edge of a box of half-width w lies
-  to_edge <- \(ux, uy, w) pmin(w / pmax(abs(ux), 1e-9), 0.15 / pmax(abs(uy), 1e-9))  # r-style: approved
+  to_edge <- \(ux, uy, w) pmin(w / pmax(abs(ux), 1e-9), 0.15 / pmax(abs(uy), 1e-9))
   tails <- dplyr::select(nodes, from = "name", x0 = "x", y0 = "y", w0 = "half_w")
   heads <- dplyr::select(nodes, to = "name", x1 = "x", y1 = "y", w1 = "half_w")
   arrows <- dagitty::edges(d) |>

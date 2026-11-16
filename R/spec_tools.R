@@ -23,7 +23,7 @@
 #               marginaleffects and effectsize; the rows dplyr and datawizard;
 #               the iteration purrr.
 # Author:       Chris Moreh
-# Last updated: 2026-11-15
+# Last updated: 2026-11-16
 # Sourced by:   index.qmd and working_script.R (source("R/spec_tools.R"))
 ##############################################################################
 
@@ -53,9 +53,10 @@
 # marginal effect come from packages: parameters with sandwich for the HC2
 # errors of the linear model, marginaleffects for the average marginal effect
 # of the logit. R/check_parity.R in the course repository checks both
-# against estimatr and margins. The rows are chosen with dplyr, because
-# datawizard evaluates its conditions in a fresh environment and so cannot see
-# the arguments of a function.
+# against estimatr and margins. The rows and the outcome are built with
+# dplyr, because inside a function datawizard::data_modify() and
+# data_summary() do not find the arguments of that function, and
+# data_filter() finds such arguments only from datawizard 1.5.0.
 
 # The options of the curve, in menu order. Anything else is refused by
 # check_spec() with the reason recorded in data/menu_options.csv.
@@ -77,7 +78,7 @@ ADJUST_TERMS <- list(
 
 # The analysed rows and the outcome of one specification. Bounced emails never
 # reached an official and are outside the experiment under every option.
-spec_frame <- function(housing, comparison = "white", population = "replies", uncoded = "drop") {  # r-style: approved
+spec_frame <- function(housing, comparison = "white", population = "replies", uncoded = "drop") {
   housing |>
     dplyr::filter(!is.na(reply),
                   .env$comparison == "nonhispanic" | group %in% c("white", "hispanic"),
@@ -95,7 +96,7 @@ spec_frame <- function(housing, comparison = "white", population = "replies", un
 # github.com/marton-balazs-kovacs/multi100): t with its df, which is the rule of
 # effectsize::t_to_r(); z with the sample size standing in for the missing df;
 # a chi-square read as the square of a z, so it carries no sign.
-r_robustness <- function(stat, stat_type, df, n) {  # r-style: approved
+r_robustness <- function(stat, stat_type, df, n) {
   dplyr::case_when(
     stat_type == "t" ~ effectsize::t_to_r(stat, df, ci = NULL)$r,
     stat_type == "z" ~ tanh(abs(stat) * sqrt(1 / (n - 3))) * sign(stat),
@@ -103,7 +104,7 @@ r_robustness <- function(stat, stat_type, df, n) {  # r-style: approved
   )
 }
 
-check_spec <- function(comparison, population, uncoded, model, adjust) {  # r-style: approved
+check_spec <- function(comparison, population, uncoded, model, adjust) {
   chosen <- list(comparison = comparison, population = population, uncoded = uncoded,
                  model = model, adjust = adjust)
   bad <- names(chosen)[!purrr::map2_lgl(chosen, SPEC_AXES[names(chosen)], \(v, ok) v %in% ok)]
@@ -118,7 +119,7 @@ check_spec <- function(comparison, population, uncoded, model, adjust) {  # r-st
 # greeted by name less often, the direction of the claim), its SE and 95%
 # interval, the test of the model that the specification fits, and the partial
 # correlation by the rule of the robustness study.
-fit_spec <- function(housing, comparison = "white", population = "replies", uncoded = "drop",  # r-style: approved
+fit_spec <- function(housing, comparison = "white", population = "replies", uncoded = "drop",
                      model = "lpm", adjust = "none") {
   check_spec(comparison, population, uncoded, model, adjust)
   terms <- ADJUST_TERMS[[adjust]]
@@ -167,7 +168,7 @@ fit_spec <- function(housing, comparison = "white", population = "replies", unco
 }
 
 # The free-text label that carries a specification to the class chart.
-spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-style: approved
+spec_line <- function(comparison, population, uncoded, model, adjust) {
   sprintf("comparison=%s population=%s uncoded=%s model=%s adjust=%s",
           comparison, population, uncoded, model, adjust)
 }
@@ -206,20 +207,20 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
 # NA, as readr reads it: the 14 authorities without community thirds would
 # otherwise enter the adjusted models as a fourth level "".
 .cache <- new.env(parent = emptyenv())
-.read_once <- function(name, path) {  # r-style: approved
+.read_once <- function(name, path) {
   if (is.null(.cache[[name]])) {
     if (!file.exists(path))
       stop(sprintf("%s is missing – the workspace ships it under data/. Run from the workspace root folder.",
                    path), call. = FALSE)
-    assign(name, utils::read.csv(path, stringsAsFactors = FALSE, encoding = "UTF-8", # r-style: keep – the same reader as the browser lab
+    assign(name, utils::read.csv(path, stringsAsFactors = FALSE, encoding = "UTF-8",
                                  na.strings = c("", "NA")),
            envir = .cache)
   }
   .cache[[name]]
 }
-.housing   <- function() .read_once("housing", "data/housing_emails.csv")  # r-style: approved
-.curve   <- function() .read_once("curve", "data/spec_curve.csv")  # r-style: approved
-.options <- function() .read_once("options", "data/menu_options.csv")  # r-style: approved
+.housing   <- function() .read_once("housing", "data/housing_emails.csv")
+.curve   <- function() .read_once("curve", "data/spec_curve.csv")
+.options <- function() .read_once("options", "data/menu_options.csv")
 
 
 # ---- Pages of the course site ----------------------------------------------------
@@ -232,11 +233,11 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
   "companion/binary-outcomes.qmd" = "Binary outcomes",
   "companion/dags.qmd"            = "Causal graphs and conditioning",
   "companion/multiverse.qmd"      = "The multiverse and its critics")
-.page_ref <- function(path) {  # r-style: approved
+.page_ref <- function(path) {
   title <- if (path %in% names(.pages)) .pages[[path]] else path
   sprintf("%s, %s/%s", title, .course_url, sub(".qmd", ".html", path, fixed = TRUE))
 }
-.or_list <- function(x) {  # r-style: approved
+.or_list <- function(x) {
   q <- paste0("\"", x, "\"")
   if (length(q) == 1) q else paste(paste(q[-length(q)], collapse = ", "), "or", q[length(q)])
 }
@@ -248,9 +249,9 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
 # my_* choices of the preregistration block. An option that is not on the
 # curve stops with the reason from menu_options.csv, the page of the course
 # site that teaches it, and the options that stay on the curve.
-.on_menu <- function(axis, v) is.character(v) && length(v) == 1 && !is.na(v) && v %in% .menu[[axis]]  # r-style: approved
+.on_menu <- function(axis, v) is.character(v) && length(v) == 1 && !is.na(v) && v %in% .menu[[axis]]
 
-.refuse <- function(axis, v, as_args) {  # r-style: approved
+.refuse <- function(axis, v, as_args) {
   shown <- if (as_args) axis else paste0("my_", axis)
   keep  <- .menu[[axis]]
   map   <- paste0("  Every decision and its options: ", .page_ref("menu.qmd#map"))
@@ -277,7 +278,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
   stop(paste(msg, collapse = "\n"), call. = FALSE)
 }
 
-.validate <- function(ch, as_args = FALSE) {  # r-style: approved
+.validate <- function(ch, as_args = FALSE) {
   bad <- purrr::discard(names(.menu), \(a) .on_menu(a, ch[[a]]))
   if (length(bad) > 0) .refuse(bad[1], ch[[bad[1]]], as_args)
   ch[names(.menu)]
@@ -285,7 +286,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
 
 # The choices are looked up from the frame of this function outwards, which
 # reaches the session in which the preregistration block was run.
-.check_choices <- function() {  # r-style: approved
+.check_choices <- function() {
   need <- paste0("my_", names(.menu))
   ch <- mget(need, envir = environment(), inherits = TRUE, ifnotfound = list(NULL))
   missing <- need[purrr::map_lgl(ch, is.null)]
@@ -303,7 +304,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
 # marginal effect of the logit) and the place of the result among the 64. The
 # fit is checked against its row of data/spec_curve.csv; a difference means
 # that a file in data/ has been edited.
-.result <- function(ch) {  # r-style: approved
+.result <- function(ch) {
   fit <- fit_spec(.housing(), ch$comparison, ch$population, ch$uncoded, ch$model, ch$adjust) |>
     as.list()
   curve <- .curve()
@@ -323,12 +324,12 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
 
 
 # ---- The printout ----------------------------------------------------------------
-.comparison_label <- function(comparison)  # r-style: approved
+.comparison_label <- function(comparison)
   c(white = "white names", nonhispanic = "white and Black names")[[comparison]]
 
-.fmt_p <- function(p) sprintf("= %s", format(signif(p, 2), scientific = FALSE))  # r-style: approved
+.fmt_p <- function(p) sprintf("= %s", format(signif(p, 2), scientific = FALSE))
 
-.class_line <- function(res) {  # r-style: approved
+.class_line <- function(res) {
   below <- res$b_pp < 0
   sig   <- res$p < 0.05
   if (below && sig) "below zero and significant at 5%, in the direction of the claim"
@@ -337,7 +338,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {  # r-sty
   else "above zero and not significant at 5%"
 }
 
-.print_result <- function(ch, res, lead = NULL) {  # r-style: approved
+.print_result <- function(ch, res, lead = NULL) {
   unit <- if (ch$population == "all") "delivered emails" else "replies"
   test <- if (res$stat_type == "t") c(
     sprintf("  Test: t = %.2f on %d df, p %s (linear probability model, HC2 standard errors)",
@@ -372,7 +373,7 @@ assign("last", NULL, envir = .tried)
 # The first five arguments are the decisions on which the curve keeps more
 # than one option; the other six are fixed on the curve, and asking for any
 # other option of theirs prints the reason why it is not on the curve.
-try_spec <- function(comparison = "white", population = "replies", uncoded = "drop",  # r-style: approved
+try_spec <- function(comparison = "white", population = "replies", uncoded = "drop",
                      model = "lpm", adjust = "none", outcome = "named", names = "both",
                      officials = "any", bounced = "exclude", inference = "model", scale = "pp") {
   ch <- .validate(list(outcome = outcome, comparison = comparison, population = population,
@@ -381,7 +382,7 @@ try_spec <- function(comparison = "white", population = "replies", uncoded = "dr
                        inference = inference, scale = scale), as_args = TRUE)
   res <- .result(ch)
   .print_result(ch, res, lead = "")
-  row <- data.frame(ch, b_pp = res$b_pp, ci_low = res$ci_low, ci_high = res$ci_high,  # r-style: keep – data.frame() spreads the list of choices into columns
+  row <- data.frame(ch, b_pp = res$b_pp, ci_low = res$ci_low, ci_high = res$ci_high,
                     stat_type = res$stat_type, stat = res$stat, p = res$p, n = res$n,
                     stringsAsFactors = FALSE)
   assign("log", dplyr::bind_rows(.tried$log, row), envir = .tried)
@@ -391,7 +392,7 @@ try_spec <- function(comparison = "white", population = "replies", uncoded = "dr
 
 # The running log of everything try_spec() has fitted. Only the decisions that
 # varied are shown; the others are those of the reference specification.
-my_experiments <- function() {  # r-style: approved
+my_experiments <- function() {
   d <- .tried$log
   if (is.null(d)) {
     writeLines("Nothing tried yet – call try_spec() at least once.")
@@ -415,7 +416,7 @@ my_experiments <- function() {  # r-style: approved
   invisible(show)
 }
 
-submit_exploration <- function(nickname = NULL) {  # r-style: approved
+submit_exploration <- function(nickname = NULL) {
   if (is.null(.tried$last))
     stop("Nothing to submit – call try_spec() first, ending with the specification you want on the chart.",
          call. = FALSE)
@@ -427,7 +428,7 @@ submit_exploration <- function(nickname = NULL) {  # r-style: approved
 # ---- Task 5: the declared helpers --------------------------------------------------
 # prereg() prints the block and returns it, so that run_spec() can check that
 # the block has not changed since.
-prereg <- function() {  # r-style: approved
+prereg <- function() {
   ch <- .check_choices()
   rows <- .options() |>
     dplyr::filter(paste(.data$axis, .data$option) %in% paste(names(ch), unlist(ch))) |>
@@ -457,7 +458,7 @@ prereg <- function() {  # r-style: approved
   invisible(structure(list(choices = ch), class = "housing_prereg"))
 }
 
-run_spec <- function(spec) {  # r-style: approved
+run_spec <- function(spec) {
   if (missing(spec) || !inherits(spec, "housing_prereg"))
     stop("Pass the object that prereg() returned: my_spec <- prereg(), then run_spec(my_spec).",
          call. = FALSE)
@@ -467,7 +468,7 @@ run_spec <- function(spec) {  # r-style: approved
   .print_result(spec$choices, .result(spec$choices), "Your preregistered specification, fitted live:")
 }
 
-report_result <- function(nickname = NULL) {  # r-style: approved
+report_result <- function(nickname = NULL) {
   ch <- .check_choices()
   .submit(ch, .result(ch), "declared",
           "Your declared submission (straight from your preregistration):", nickname)
@@ -496,7 +497,7 @@ report_result <- function(nickname = NULL) {  # r-style: approved
 
 # A fresh tag, drawn without touching the random-number stream of the session,
 # so that a participant's set.seed() keeps reproducing the same draws.
-.new_tag <- function() {  # r-style: approved
+.new_tag <- function() {
   had_seed <- exists(".Random.seed", envir = globalenv(), inherits = FALSE)
   if (had_seed) old_seed <- get(".Random.seed", envir = globalenv())
   on.exit(if (had_seed) assign(".Random.seed", old_seed, envir = globalenv())
@@ -507,7 +508,7 @@ report_result <- function(nickname = NULL) {  # r-style: approved
 
 # A nickname reduced to lower-case ASCII letters, digits and single hyphens,
 # at most 24 characters – the only form that the class chart parses.
-.clean_tag <- function(x) {  # r-style: approved
+.clean_tag <- function(x) {
   # iconv on Windows turns these into "?": the Romanian comma-below letters and the eszett
   x <- gsub("ß", "ss", chartr("ȘșȚț", "SsTt", trimws(as.character(x)[1])))
   ascii <- suppressWarnings(iconv(x, to = "ASCII//TRANSLIT"))
@@ -522,7 +523,7 @@ report_result <- function(nickname = NULL) {  # r-style: approved
 
 # The tag of this workspace: the nickname if one is given, otherwise the stored
 # tag, otherwise a fresh one. Returns the tag and the one it replaced, if any.
-.class_tag <- function(nickname = NULL) {  # r-style: approved
+.class_tag <- function(nickname = NULL) {
   stored <- if (file.exists(.tag_file))
     tryCatch(.clean_tag(readLines(.tag_file, warn = FALSE)[1]), error = function(e) NULL)
   tag <- if (!is.null(nickname)) .clean_tag(nickname) else if (!is.null(stored)) stored else .new_tag()
@@ -535,7 +536,7 @@ report_result <- function(nickname = NULL) {  # r-style: approved
 # decisions that vary on the curve. The estimate and its standard error are
 # sent in percentage points, the statistic of the model in the t field (a z
 # for a logit, whose df field stays empty), and r by the rule of the robustness study.
-.submit <- function(ch, res, phase, lead, nickname = NULL) {  # r-style: approved
+.submit <- function(ch, res, phase, lead, nickname = NULL) {
   tg <- .class_tag(nickname)
   spec_label <- paste0(phase, ": [", tg$tag, "] ", .case_word, " ",
                        spec_line(ch$comparison, ch$population, ch$uncoded, ch$model, ch$adjust))

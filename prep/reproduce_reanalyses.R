@@ -34,7 +34,7 @@ coded_replies <- original |>
   datawizard::data_modify(hispanic_name = grepl("^Hispanic", TreatmentGroup))
 nrow(coded_replies)   # 558
 
-tab_8ptrz <- xtabs(~ hispanic_name + ProperName, data = coded_replies)  # r-style: keep – the table that chisq.test() takes
+tab_8ptrz <- xtabs(~ hispanic_name + ProperName, data = coded_replies)
 tab_8ptrz
 chisq.test(tab_8ptrz)                    # X-squared = 14.265
 chisq.test(tab_8ptrz, correct = FALSE)   # X-squared = 14.952

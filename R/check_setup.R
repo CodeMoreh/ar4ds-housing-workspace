@@ -62,13 +62,13 @@ if (nzchar(qv) && !grepl("not found|error", qv, ignore.case = TRUE)) {
 # installation without it renders nothing.
 needed <- c("dplyr", "purrr", "readr", "tibble", "datawizard", "parameters", "sandwich",
             "marginaleffects", "effectsize", "tinyplot", "dagitty", "rmarkdown")
-missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)] # r-style: keep – purrr may not be installed yet
+missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing) == 0) {
   ok(paste0("all ", length(needed), " required packages installed"))
 } else {
   fail(paste0("missing package(s): ", paste(missing, collapse = ", ")))
   writeLines(c("        install the missing ones with:",
-               paste0('          install.packages("pak"); pak::pak(c("', # r-style: keep – the instruction printed for a machine without pak
+               paste0('          install.packages("pak"); pak::pak(c("',
                       paste(missing, collapse = '", "'), '"))')))
 }
 
@@ -81,12 +81,12 @@ if (length(missing) == 0) {
 # two hold the five analyses of the robustness study and the reference marks of the curve.
 data_files <- c("data/housing_emails.csv", "data/housing_original.csv", "data/spec_curve.csv",
                 "data/menu_options.csv", "data/analysts5.csv", "data/reference_marks.csv")
-for (f in data_files) { # r-style: keep – each pass prints one check line
+for (f in data_files) {
   if (!file.exists(f)) {
     fail(paste0("data file missing: ", f, " – run from the workspace root folder"))
     next
   }
-  n_rows <- tryCatch(nrow(utils::read.csv(f)), error = function(e) NA_integer_) # r-style: keep – readr may not be installed yet
+  n_rows <- tryCatch(nrow(utils::read.csv(f)), error = function(e) NA_integer_)
   if (is.na(n_rows)) {
     fail(paste0("could not read ", f))
   } else {
@@ -110,7 +110,7 @@ if (length(missing) == 0 && all(file.exists(data_files[c(1, 3)])) && file.exists
   tools <- new.env()
   check <- tryCatch({
     sys.source("R/spec_tools.R", envir = tools)
-    curve <- utils::read.csv("data/spec_curve.csv") # r-style: keep – the stored curve, read in base R
+    curve <- utils::read.csv("data/spec_curve.csv")
     list(live = get("fit_spec", envir = tools)(get(".housing", envir = tools)())$b_pp,
          stored = curve$b_pp[curve$is_reference])
   }, error = function(e) list(live = NA_real_, stored = NA_real_, msg = conditionMessage(e)))
