@@ -21,16 +21,13 @@ knitr:
 #| label: setup
 #| include: false
 
-# Every function is written with the package that it comes from, as in
-# readr::read_csv(). Run R/check_setup.R first if a package is missing on your
-# own laptop – it tells you which, and how to install them.
+# If a package is missing, run R/check_setup.R: it names the package and
+# prints the line that installs it.
 
-# The one working object: the Housing data, one row per email.
+# The Housing data, one row per email.
 housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
 
-# The helpers of Tasks 4 and 5. Every fit they make is a live fit of the
-# estimator of the course on the Housing data, and in Task 5 they read
-# their choices from your preregistration.
+# The helpers of Tasks 4 and 5.
 source("R/spec_tools.R")
 ```
 
@@ -42,22 +39,20 @@ In 2014 the original authors (OAs) emailed 1,017 public housing authorities in t
 
 This is a sentence of their abstract as the SCORE programme selected it for its robustness study (Multi100; Aczel et al. 2026), which gave it to five analysts to test. The published estimate is −20.0 percentage points (95% CI −30.5 to −10.0): the change in the predicted probability of a greeting by name from a white to a Hispanic name, from a logistic regression with covariates.
 
-You have the public data of the OAs, the tools of the analysts of the robustness study and the choices that they faced. You are analyst no. 6, and the question is how robust that gap is to *justifiable* alternative choices. Work through the five tasks below in order, from a setup check to two marks on the live class chart: an exploratory one from Task 4, and a declared one from Task 5, whose specification you fix in your preregistration before running it.
+You are analyst no. 6, and the question is how robust that gap is to *justifiable* alternative choices. Work through the five tasks below in order.
 
 ::: callout-tip
 ## How the tasks work
 
-Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code. The course site carries the same exercise in the browser: on the slides, which run R inside the browser and on which the facilitator shows each step, and in the browser lab, which holds the same tasks on a page. Both stand in if your machine fails. This workspace is the full pipeline, worked in an IDE (Positron, RStudio, VS Code, etc.).
+Every task is a callout box with instructions, a **TODO** for you to complete, and code chunks that **already run**, so the report renders from the first preview. You edit the prose blanks and, in Tasks 2, 4 and 5, the code.
 :::
 
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 1 – The setup check and the three Rs"}
-**First, the setup check.** If this report renders at all, your workspace is working: the packages are installed, the data are in place, and the helpers are loaded. Render it once now, before anything else. If it does not render, run `source("R/check_setup.R")` in the console. It names the packages that you are missing and how to install them, and its last check fits the reference specification of the course, which must come out at −19.97 percentage points.
+**The setup check.** Render this report once now. If it does not render, run `source("R/check_setup.R")` in the console, which names what is missing and prints the line that installs it.
 
-**Then, before touching data, fix the vocabulary.** Three of the four scenarios below describe one of our three Rs (reproducibility, robustness, replicability), while the fourth describes something else entirely.
-
-**TODO: read the four scenarios and fill in the gaps.**
+**TODO:** three of the four scenarios below describe one of the three Rs (reproducibility, robustness, replicability), and the fourth describes something else. Fill in the gaps.
 
 ***Scenario 1:*** A reviewer runs the Stata `.do` file of the OAs on their public data file and gets a coefficient for Hispanic names that differs from the one printed in the paper, because the public file holds the size, poverty and ethnic composition of each community in thirds rather than as the census values. This is an example of \_\_\_\_\_\_, even though the numbers do not match.
 
@@ -73,7 +68,7 @@ Every task is a callout box with instructions, a **TODO** for you to complete, a
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 2 – The data"}
-The **Housing data** (`housing_emails.csv`) hold one row per email. They are already loaded as `housing` in the setup chunk. The file is built from the public file of the OAs on Harvard Dataverse (doi:10.7910/DVN/1HOVTU, released under CC0), with plainer column names; `housing_original.csv`, which Task 3 uses, is that public file with its original names.
+The **Housing data** (`data/housing_emails.csv`) are loaded as `housing` in the setup chunk, one row per email, and `data/housing_emails_codebook.md` describes every column.
 
 **TODO:** run the chunks, then read the figure. Which name received the fewest greetings by name? Note it in a comment.
 
@@ -127,7 +122,7 @@ tinyplot::tinyplot(x = seq_len(nrow(greeted)), y = greeted$greeted_pct, flip = T
                    cex = 0.9, add = TRUE)
 ```
 
-The replies to white names greeted the sender by name in 61.1% of cases, those to Hispanic names in 41.2%: a gap of about 20 points, the size of the published estimate. Black names fall in between, at 56.1%. Every column is described in `data/housing_emails_codebook.md`.
+The replies to white names greeted the sender by name in 61.1% of cases, those to Hispanic names in 41.2%: a gap of about 20 points, the size of the published estimate. Black names fall in between, at 56.1%.
 :::
 
 ------------------------------------------------------------------------
@@ -141,7 +136,7 @@ Before estimating, say *precisely* what you are estimating. An estimand has two 
 
 *(A defensible filling: a reply that greets the sender by name; a white name; the public housing authorities that received an email. The catch is that an authority whose official would not reply to one of the names has no greeting to compare. The comparison can then count every delivered email, a missing reply counting as no greeting, or count the replies only, which compares the authorities that replied to Hispanic names with those that replied to white names. These need not be the same authorities.)*
 
-A causal graph makes that catch visible. `R/dag_starter.R` builds the graph with `dagitty::dagitty()` from a model string with one arrow per line, each written the way it is drawn: `"name -> reply"` is the arrow from the name to the reply. The name can affect whether the official replies, and only a reply can greet the sender by name. Something about the official that nobody recorded (workload, habits of courtesy, attitudes) affects both whether they reply and how they greet, and so does the community of the housing authority. One arrow is switched off with a `#`: the arrow from the name to the greeting, which is the effect on tone that the claim is about.
+A causal graph makes that catch visible. `R/dag_starter.R` builds it with `dagitty::dagitty()`, one arrow to a line, with the reason for each arrow in a comment. One arrow is switched off with a `#`: the arrow from the name to the greeting, which is the effect on tone that the claim is about.
 
 ```{r}
 #| label: fig-dag
@@ -193,7 +188,7 @@ This is the **reproducibility** check. Five analysts reanalysed the claim for th
 | 25N5D | Hispanic against white names | the 665 delivered emails to those names, a missing reply counted as no greeting | two-proportion test | $\chi^2$ = 13.683 |
 | P9W8Y | the three groups | the 558 replies with a greeting code | likelihood-ratio test of a logistic regression | none |
 
-Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you chose line by line. When you have your value, type the analyst and the value into the chat, for example `UYV3F z = -3.771`, hold it, and send it on the facilitator's word. The four recorded statistics all come out exactly. For P9W8Y the robustness study recorded no statistic, so its analysis can be run again but there is nothing on record to match it against.
+Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you chose line by line.
 
 ```{r}
 #| label: reproduce-read
@@ -203,8 +198,6 @@ original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 ::: {.panel-tabset}
 
 ### 8PTRZ
-
-Hispanic names against all other names, white and Black together, among the 558 replies that carry a greeting code, with a chi-square test of the 2 × 2 table.
 
 ```{r}
 #| label: reproduce-8ptrz
@@ -222,8 +215,6 @@ The test gives **X-squared = 14.265** on 1 df, the value on record for 8PTRZ.
 
 ### UYV3F
 
-Hispanic against white names only, among the 362 coded replies to those names, with a logistic regression of the greeting on the name and no covariates.
-
 ```{r}
 #| label: reproduce-uyv3f
 replies_uyv3f <- original |>
@@ -238,8 +229,6 @@ print(parameters::model_parameters(m_uyv3f, ci_method = "wald"), digits = 3)
 The row of the Hispanic names gives **z = −3.771** on 362 replies, the value on record for UYV3F.
 
 ### EWFMI
-
-A logistic regression of the greeting on all three groups of names, with the Hispanic names as the base group, the sex of the name, the poverty third of the community entered as a number, and the hard-to-find address, as the analyst fitted it in Stata. The 9 coded replies from communities without a poverty third drop out.
 
 ```{r}
 #| label: reproduce-ewfmi
@@ -259,8 +248,6 @@ The row `ethnicity [white]` gives **z = 3.645** on 549 replies, the value on rec
 
 ### 25N5D
 
-Hispanic against white names among every delivered email, an email without a reply counted as one without a greeting, with the two-proportion test of R. The five replies without a greeting code stay in the denominators.
-
 ```{r}
 #| label: reproduce-25n5d
 counts_25n5d <- original |>
@@ -276,8 +263,6 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails)
 The test gives **X-squared = 13.683** on 1 df for 665 emails, the value on record for 25N5D.
 
 ### P9W8Y
-
-A logistic regression of the greeting on the three groups of names among the 558 coded replies, and a likelihood-ratio test of whether the three groups differ at all.
 
 ```{r}
 #| label: reproduce-p9w8y
@@ -296,7 +281,7 @@ The column `Deviance` gives 15.951 on 2 degrees of freedom. The robustness study
 
 :::
 
-Now find out why your number is exactly that number. For a 2 × 2 table, `chisq.test()` and `prop.test()` both apply the continuity correction of Yates unless they are told otherwise: it shrinks each gap between an observed and an expected count by 0.5 before squaring, a remedy designed for small tables. Neither 8PTRZ nor 25N5D asked for the correction. The defaults of the two functions applied it, and the recorded values are the corrected ones.
+Now find out why your number is exactly that number. For a 2 × 2 table, `chisq.test()` and `prop.test()` both apply the continuity correction of Yates unless they are told otherwise. Neither 8PTRZ nor 25N5D asked for the correction: the defaults of the two functions applied it, and the recorded values are the corrected ones.
 
 ```{r}
 #| label: reproduce-uncorrected
@@ -309,20 +294,12 @@ Without the correction the statistics are 14.95 and 14.33. Neither changes the c
 The same steps are in `prep/reproduce_reanalyses.R` as a script. The scripts that the analysts submitted are on the OSF, in the component of the robustness study for the paper (osf.io/38rsh), one sub-component for each analyst.
 :::::
 
-::: {.callout-note collapse="true" title="Reproduction and the five analysts"}
-You reproduced the value of the analyst whom you chose, and so did everyone else who chose the same analyst, because everyone ran the same code on the same file. That is why reproducibility is the cheapest of the three Rs to establish.
-
-The five analysts of the robustness study each wrote their own code for this claim. Three concluded that the results were evidence for the claim and two that they were evidence neither for nor against it, although the four statistics recorded in the robustness study all come from gaps in the same direction. Part of the difference lies in the questions that each analyst chose to answer (which names to compare, which emails to count), and part in what each analyst took to count as evidence: one of the two who answered 'neither' found the gap but judged it substantially smaller than the published one. The [background page](https://codemoreh.github.io/ar4ds-housing/background.html) on the course site sets out what each analyst chose.
-
-In Task 2 you named the quantity that you are after and drew the graph that shows what each comparison conditions on. In Task 4 you will find out how far the answer moves when the choices change.
-:::
-
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 4 – The menu"}
-This task is **exploratory**. Try several specifications, look at what each one does, and get a feel for which choices move the estimate and which barely touch it. The specification that you submit with `submit_exploration()` at the end of this task appears on the class chart as an open circle, labelled exploratory. The declared one, a filled circle, is fixed later, in the preregistration block of Task 5, before it is run. Both carry the tag that `submit_exploration()` prints, such as `amber-otter-42`, which is kept in the file `.class-tag` of this workspace and lets you find your own marks on the chart. To choose your own, write `submit_exploration(nickname = "...")` with a nickname rather than your name, because the chart is public.
+This task is **exploratory**. Try several specifications and find out which choices move the estimate and which barely touch it.
 
-`try_spec()` takes one argument per decision of the specification menu. Every argument defaults to the reference specification, the raw gap of the paper (Hispanic against white names, among the replies, the five uncoded replies left out, a difference in proportions without covariates), so changing one thing means changing one argument. Every call is a live fit on your machine. The first five arguments are the decisions on which the curve of the claim keeps more than one option:
+`try_spec()` takes one argument for each decision of the specification menu. Every argument defaults to the reference specification, the raw gap of the paper (Hispanic against white names, among the replies, the five uncoded replies left out, a difference in proportions without covariates), so changing one decision means changing one argument. The first five arguments are the decisions on which the curve of the claim keeps more than one option:
 
 - `comparison` – white names (`"white"`), or white and Black names together (`"nonhispanic"`);
 - `population` – the replies only (`"replies"`), or every delivered email with no reply counted as no greeting (`"all"`);
@@ -349,7 +326,7 @@ try_spec(model      = "logit")           # the model of the paper, as an average
 try_spec(adjust     = "place_ethnic")    # the covariates of the original model, in thirds
 ```
 
-The first two calls change the question that is being asked of the data, the third changes how the outcome is measured, and the last two change only how the same question is estimated. The menu holds more options than the curve, which keeps only the options that answer this claim in a justifiable way. Every other option is still an argument of `try_spec()`, and trying one is part of the exercise: the helper refuses it, gives the reason why it is not on the curve, and names the page of the course site that teaches it. The next chunk stops with that reason, and the report still renders because the chunk is marked `error: true`. Edit it to try others, such as `outcome = "reply"`, `names = "male"`, `comparison = "black"`, `adjust = "acs_continuous"` or `inference = "one_tailed"`:
+The first two calls change the question that is being asked of the data, the third changes how the outcome is measured, and the last two change only how the same question is estimated. The menu holds more options than the curve, which keeps only the options that answer this claim in a justifiable way. `try_spec()` refuses an option that is off the curve and gives the reason, and the report still renders because the next chunk is marked `error: true`. Edit the chunk to try others, such as `outcome = "reply"`, `names = "male"`, `comparison = "black"`, `adjust = "acs_continuous"` or `inference = "one_tailed"`:
 
 ```{r}
 #| label: try-off-curve
@@ -357,14 +334,14 @@ The first two calls change the question that is being asked of the data, the thi
 try_spec(model = "three_group")          # all three groups in one model: refused, with the reason why
 ```
 
-Everything you try is logged. Print the log to view the small multiverse that you have just built. Only the decisions that you varied are shown, which keeps the comparison readable:
+`my_experiments()` prints everything that you have tried, side by side, with only the decisions that you varied:
 
 ```{r}
 #| label: my-experiments
 my_experiments()
 ```
 
-When you have tried three or four, decide which one you would defend if you had to, run it once more so that it is the most recent, and submit it. It appears on the live class chart as an **exploratory** result:
+When you have tried three or four, decide which one you would defend, run it once more so that it is the most recent, and submit it. It appears on the live class chart as an open circle, labelled **exploratory**, with the tag that `submit_exploration()` prints, such as `amber-otter-42`. The tag is kept in the file `.class-tag` of this workspace, your declared result in Task 5 carries the same one, and it is how you find your own marks on the chart. To choose your own, write `submit_exploration(nickname = "...")` with a nickname rather than your name, because the chart is public:
 
 ```{r}
 #| label: submit-exploration
@@ -372,22 +349,12 @@ When you have tried three or four, decide which one you would defend if you had 
 submit_exploration()
 ```
 
-::: {.callout-note collapse="true" title="Exploratory and declared"}
-You chose this specification after finding out what several of them do, so it lacks the guarantee that a choice fixed in a preregistration before it is run carries: it might have been chosen *because* of its result, and neither you nor anyone else can now rule that out.
-
-Almost no published paper reports which of its analyses were explored and which were planned. The class chart does, because everyone submits twice: once here, and once in Task 5 after preregistering a specification, so that the two sets of marks can be read against each other.
-:::
-
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 5 – The preregistration"}
-A preregistration fixes your specification **before** you know its result, which stops you from quietly picking the one that happens to give the answer you wanted. In a real study it is filed, with a date stamp, in a public registry such as the OSF. In this report the preregistration is the block below, and the code enforces it: the R session keeps the choices that you set in that block, and `run_spec()` and `report_result()` read them from there.
+A preregistration fixes your specification **before** you know its result, which stops you from quietly picking the one that happens to give the answer you wanted. In a real study it is filed, with a date stamp, in a public registry such as the OSF. In this report it is the block below, and `run_spec()` and `report_result()` read your choices from it. Its numbered fields follow the preregistration template of AsPredicted in a shortened form, and field 2 also stands in for the prior-knowledge section of the template for secondary data (van den Akker et al. 2021).
 
-Make one choice on each decision of the menu, complete the dotted lines, then run the block. The five decisions about the question fix what you are asking, the two measurement decisions fix how the outcome is counted, and the four decisions about the model fix how the answer is reached. The curve of 64 specifications keeps two or more options on five of these decisions and a single option on the other six. An option that is not on the curve stops `prereg()` with the reason why, as it stops `try_spec()`.
-:::
-
-::: {.callout-important title="How this block maps to a real preregistration"}
-*A real preregistration, shortened. Each numbered comment maps to a question in the OSF "Preregistration Template from AsPredicted.org" (the eight-question short form). Because you are reanalysing data that already exist, field 2 also stands in for the prior-knowledge section of the secondary-data template (van den Akker et al. 2021) – the part that AsPredicted leaves out.*
+Make one choice on each decision of the menu, complete the dotted lines, then run the block.
 :::
 
 ```{r}
@@ -433,7 +400,7 @@ The block above, rendered into this report, is your preregistration.
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Task 5, continued – Fit, report and place"}
-This is the **robustness** check, and it is the part that your classmates cannot copy from you. Together, the class samples the multiverse of defensible analyses. Your specification is fixed in the preregistration block above. `run_spec()` fits it for real and prints the same lines as `try_spec()`; it refuses to run if the block has changed since `prereg()` read it.
+Your specification is fixed in the preregistration block above. `run_spec()` fits it and prints the same lines as `try_spec()`. It refuses to run if the block has changed since `prereg()` read it.
 :::
 
 ```{r}
@@ -441,9 +408,9 @@ This is the **robustness** check, and it is the part that your classmates cannot
 run_spec(my_spec)
 ```
 
-Read the output like an analyst. The difference is in percentage points, and a value below zero means that replies to Hispanic names greeted the sender by name less often, the direction of the claim. Whether it is significant is decided by the test of the model, and the line headed `Verdict:` says which of the four cases your result falls in. The last line places it among the 64 specifications of the curve.
+The difference is in percentage points, and a value below zero means that replies to Hispanic names greeted the sender by name less often, the direction of the claim. Whether it is significant is decided by the test of the model, and the line headed `Verdict:` says which of the four cases your result falls in. The last line places it among the 64 specifications of the curve.
 
-Now submit it to the class chart. There is nothing to fill in and nothing to transcribe: `report_result()` refits your preregistered specification, builds the spec label, and prints your submission line and a pre-filled form link. Open it and press **Send**. Your mark appears on the live [class chart](https://codemoreh.github.io/ar4ds-housing/class-results.html) within seconds, this time as a filled circle labelled **declared**, with the same tag as your exploratory result.
+Now send it to the class chart. `report_result()` prints your submission line and the address of a pre-filled form. Open the address and press **Send**. Your mark appears on the live [class chart](https://codemoreh.github.io/ar4ds-housing/class-results.html) within seconds as a filled circle labelled **declared**, with the same tag as your exploratory result.
 
 ```{r}
 #| label: report
@@ -473,7 +440,7 @@ tinyplot::tinyplot(b_pp ~ rank | emails, data = spec_curve, pch = 16,
                    xlab = "The 64 specifications, from the most negative estimate",
                    ylab = "Hispanic minus comparison names (points)")
 tinyplot::tinyplot(b_pp ~ rank, data = spec_curve, type = tinyplot::type_hline(h = 0), col = "grey60", add = TRUE)
-# your specification, ringed; clim keeps a single ring at the size of cex
+# your specification, ringed
 tinyplot::tinyplot(b_pp ~ rank, data = mine, type = tinyplot::type_points(clim = c(3, 3)),
                    pch = 1, cex = 3, lwd = 2.5, col = "#8b1538", add = TRUE)
 tinyplot::tinytheme()
@@ -481,12 +448,12 @@ tinyplot::tinytheme()
 
 All 64 estimates lie below zero, from −20.0 to −12.1 points, and every one of them is significant at 5% under the test of its model. The two clusters are the two answers to the decision on which emails are counted: counting every delivered email moves the estimate about 5 points towards zero, and no other decision moves it by more than about 2.7 points. Within these data the claim holds under every choice on the menu, and only its size moves.
 
-**A second declared specification?** Edit the preregistration block, rerun it, then rerun `run_spec(my_spec)`. The mechanics allow it, and the label does not change, so be clear with yourself about what the second one is. Your first preregistration was made without knowing its result. Anything after it was not, which puts it back in the same category as Task 4, and you should say so when you report it.
+**A second declared specification?** Edit the preregistration block, rerun it, then rerun `run_spec(my_spec)`. The chart still labels it declared, but it was chosen after a result was known, as the specifications of Task 4 were, so say so when you report it.
 
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Taking it home"}
-You did the whole analysis in a plain folder, with no version control and nothing to sign in to. Putting your own work under version control and publishing the rendered report to a live URL is the natural next step. A module of the companion curriculum on the course site goes through it click by click: [Git and GitHub for reproducible research](https://codemoreh.github.io/ar4ds/git-github.html). The `.github/` and `.devcontainer/` folders already in this workspace set up that route once the folder is a repository again.
+Putting your own work under version control and publishing the rendered report is the natural next step, and the module [Git and GitHub for reproducible research](https://codemoreh.github.io/ar4ds/git-github.html) on the course site goes through it. The `.github/` and `.devcontainer/` folders of this workspace set up that route once the folder is a repository again.
 :::
 
 ::: {.callout-note title="Going further (optional)"}
