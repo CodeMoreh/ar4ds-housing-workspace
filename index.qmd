@@ -462,11 +462,9 @@ spec_curve <- readr::read_csv("data/spec_curve.csv", show_col_types = FALSE) |>
   datawizard::data_modify(rank = 1:n(),
                           emails = factor(population, levels = c("replies", "all"),
                                           labels = c("replies only", "all delivered emails")))
-# Yours, chosen with dplyr, because datawizard cannot see the my_ choices of
-# the preregistration chunk
 mine <- spec_curve |>
-  dplyr::filter(comparison == my_comparison, population == my_population, uncoded == my_uncoded,
-                model == my_model, adjust == my_adjust)
+  datawizard::data_filter(comparison == my_comparison, population == my_population,
+                          uncoded == my_uncoded, model == my_model, adjust == my_adjust)
 
 tinyplot::tinytheme("minimal")
 tinyplot::tinyplot(b_pp ~ rank | emails, data = spec_curve, pch = 16,

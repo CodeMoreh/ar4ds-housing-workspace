@@ -4,11 +4,13 @@
 #               the data files are present and readable, and whether the
 #               estimator of the course reproduces the reference
 #               specification (-19.97 percentage points). Prints an [OK] /
-#               [FAIL] / [SKIP] line per check and a verdict. It only checks,
+#               [FAIL] / [SKIP] line per check and a verdict, and a [NOTE]
+#               where a package is at another version than the course was
+#               tested with. It only checks,
 #               and changes nothing on your system. Base R up to the last
 #               check, because it has to run before any package is installed.
 # Author:       Chris Moreh
-# Last updated: 2026-10-26
+# Last updated: 2026-11-17
 # Sourced by:   the participant, before the session (source("R/check_setup.R"))
 ##############################################################################
 
@@ -62,14 +64,42 @@ if (nzchar(qv) && !grepl("not found|error", qv, ignore.case = TRUE)) {
 # installation without it renders nothing.
 needed <- c("dplyr", "purrr", "readr", "tibble", "datawizard", "parameters", "sandwich",
             "marginaleffects", "effectsize", "tinyplot", "dagitty", "rmarkdown")
+# The course was tested with the versions that CRAN held on its package date.
+# The address is the copy of CRAN of that day kept by the public package
+# manager of Posit, and the install lines below take the packages from it.
+course_repo <- "https://packagemanager.posit.co/cran/2026-11-17"
+install_line <- '          install.packages(c("%s"), repos = "%s")'
 missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing) == 0) {
   ok(paste0("all ", length(needed), " required packages installed"))
 } else {
   fail(paste0("missing package(s): ", paste(missing, collapse = ", ")))
   writeLines(c("        install the missing ones with:",
-               paste0('          install.packages("pak"); pak::pak(c("',
-                      paste(missing, collapse = '", "'), '"))')))
+               sprintf(install_line, paste(missing, collapse = '", "'), course_repo)))
+}
+
+# The installed versions against those of the package date. A difference is
+# not a failure: the note is there for the day on which an exercise stops.
+present <- setdiff(needed, missing)
+tested <- tryCatch(
+  stats::setNames(utils::available.packages(repos = course_repo, type = "source")[present, "Version"], present),
+  error = function(e) NULL, warning = function(w) NULL
+)
+if (length(present) == 0 || is.null(tested)) {
+  skip("the package versions were not compared with those of the course (no connection)")
+} else {
+  differ <- present[vapply(present, function(p) utils::packageVersion(p) != tested[[p]], logical(1))]
+  if (length(differ) == 0) {
+    ok(paste0("the ", length(present), " packages are at the versions of the course"))
+  } else {
+    writeLines(c(
+      paste0("[NOTE] ", length(differ), " package(s) at another version than the course was tested with:"),
+      paste0("        ", differ, " ", vapply(differ, function(p) as.character(utils::packageVersion(p)), character(1)),
+             " (the course: ", tested[differ], ")"),
+      "        if an exercise fails, install the versions of the course with:",
+      sprintf(install_line, paste(differ, collapse = '", "'), course_repo)
+    ))
+  }
 }
 
 # --- 4. data files present and readable -------------------------------------

@@ -29,7 +29,12 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    env:
+      # The copy of CRAN of the package date of the course, the address that
+      # R/check_setup.R prints, as binaries for this version of Ubuntu.
+      RSPM: https://packagemanager.posit.co/cran/__linux__/noble/2026-11-17
+      CRAN: https://packagemanager.posit.co/cran/2026-11-17
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
@@ -37,12 +42,12 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: "1.9.36"
+          version: "1.11.9"
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: "4.6.0"
+          r-version: "4.6.2"
           use-public-rspm: true
 
       - name: Install R package dependencies
