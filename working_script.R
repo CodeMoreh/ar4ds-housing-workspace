@@ -15,7 +15,7 @@
 # Writes:       – (prints results to the console; the submit helpers print a
 #               pre-filled form link)
 # Author:       Chris Moreh
-# Last updated: 2026-10-27
+# Last updated: 2026-11-17
 ##############################################################################
 
 ## ---- Task 1: the setup check ---------------------------------------------
@@ -24,9 +24,7 @@
 # reference specification (-19.97 percentage points).
 source("R/check_setup.R")
 
-# Every function is written with the package that it comes from, as in
-# readr::read_csv(). The one working object, and the helpers that explore,
-# preregister, fit and report a specification.
+# The Housing data, one row per email, and the helpers of Tasks 4 and 5.
 housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
 source("R/spec_tools.R")
 
@@ -70,10 +68,8 @@ dagitty::paths(dag, Z = c("reply", "community"))
 ## ---- Task 3: reproduce one of the five reanalyses ------------------------
 
 # Choose one of the five analysts and run their section. Each reproduces the
-# analysis from the public file of the original authors, with the value that
-# the robustness study recorded beside it. When you have your value, type the analyst and
-# the value into the chat, for example "UYV3F z = -3.771", and send it on the
-# facilitator's word.
+# analysis from the public file of the original authors, with the value
+# recorded in the robustness study beside it.
 original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 
 # 8PTRZ: Hispanic against all other names among the 558 replies with a
@@ -138,10 +134,7 @@ anova(update(m_p9w8y, . ~ 1), m_p9w8y, test = "LRT")
 # try_spec() takes one argument per decision of the menu, and every one
 # defaults to the reference specification, so changing one thing means
 # changing one argument. The first five are the decisions on which the curve
-# keeps more than one option. The specification that you submit with
-# submit_exploration() is labelled exploratory on the class chart and carries
-# the tag that the function prints and keeps in .class-tag;
-# submit_exploration(nickname = "...") sets your own (a nickname, not your name).
+# keeps more than one option.
 try_spec()                                # the raw gap of the paper
 try_spec(comparison = "nonhispanic")      # Hispanic names against white and Black names together
 try_spec(population = "all")              # every delivered email, no reply counted as no greeting
@@ -159,7 +152,10 @@ try(try_spec(outcome = "reply"))          # any reply, a different claim
 # varied are printed.
 my_experiments()
 
-# Send the most recent one to the class chart, labelled as exploration.
+# Send the most recent one to the class chart, where it is labelled
+# exploratory and carries the tag that the function prints and keeps in
+# .class-tag; submit_exploration(nickname = "...") sets your own (a nickname,
+# not your name).
 submit_exploration()
 
 ## ---- Task 5: preregister one specification --------------------------------
@@ -211,7 +207,7 @@ tinyplot::tinyplot(b_pp ~ rank | emails, data = spec_curve, pch = 16,
                    xlab = "The 64 specifications, from the most negative estimate",
                    ylab = "Hispanic minus comparison names (points)")
 tinyplot::tinyplot(b_pp ~ rank, data = spec_curve, type = tinyplot::type_hline(h = 0), col = "grey60", add = TRUE)
-# your specification, ringed; clim keeps a single ring at the size of cex
+# your specification, ringed
 tinyplot::tinyplot(b_pp ~ rank, data = mine, type = tinyplot::type_points(clim = c(3, 3)),
                    pch = 1, cex = 3, lwd = 2.5, col = "#8b1538", add = TRUE)
 tinyplot::tinytheme()
