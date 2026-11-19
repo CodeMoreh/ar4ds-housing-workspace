@@ -178,7 +178,7 @@ The difference between these two comparisons is the decision on which emails are
 ------------------------------------------------------------------------
 
 ::::: {.callout-note title="Task 3 – The reproduction"}
-This is the **reproducibility** check. Five analysts reanalysed the claim for the robustness study, each with code of their own, and the robustness study recorded a test statistic for four of them. **Choose one of the five** and reproduce the analysis from the public file of the OAs, `housing_original.csv`, which keeps their column names. `Response_Dichotomous` is 1 for a reply, 0 for none and empty for a bounced email. `ProperName` is the greeting by name, empty for every email that has no reply with a greeting code. `TreatmentGroup` holds the group and the sex of the name (`"Hispanic male"`, `"white female"` and so on).
+This is the **reproducibility** check. Five analysts reanalysed the claim for the robustness study, each with code of their own, and the robustness study recorded a test statistic for four of them. Reproduce the analysis of **one of the five** from the public file of the OAs, `housing_original.csv`, which keeps their column names. `Response_Dichotomous` is 1 for a reply, 0 for none and empty for a bounced email. `ProperName` is the greeting by name, empty for every email that has no reply with a greeting code. `TreatmentGroup` holds the group and the sex of the name (`"Hispanic male"`, `"white female"` and so on).
 
 | Analyst | What the analysis compared | Emails counted | Test | Recorded in the robustness study |
 |:--|:--|:--|:--|:--|
@@ -188,7 +188,7 @@ This is the **reproducibility** check. Five analysts reanalysed the claim for th
 | 25N5D | Hispanic against white names | the 665 delivered emails to those names, a missing reply counted as no greeting | two-proportion test | $\chi^2$ = 13.683 |
 | P9W8Y | the three groups | the 558 replies with a greeting code | likelihood-ratio test of a logistic regression | none |
 
-Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you chose line by line.
+Each tab below holds the code of one analyst. The report runs all five, so that you can compare them, but work through the one that you reproduce line by line.
 
 ```{r}
 #| label: reproduce-read
