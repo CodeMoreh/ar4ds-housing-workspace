@@ -107,10 +107,13 @@ if (length(present) == 0 || is.null(tested)) {
 # housing_emails.csv is the course file that Tasks 2, 4 and 5 use, and
 # housing_original.csv the public file of the original authors, on which Task 3
 # reproduces a result of the robustness study. R/spec_tools.R reads the curve of 64
-# specifications and the reasons for the options that are not on it. The last
-# two hold the five analyses of the robustness study and the reference marks of the curve.
+# specifications and the reasons for the options that are not on it. Task 6 reads
+# housing_replication.csv, the data of the SCORE replication, and
+# replication_curve.csv, the curve of the claim on them. The last two hold the five
+# analyses of the robustness study and the reference marks of the curve.
 data_files <- c("data/housing_emails.csv", "data/housing_original.csv", "data/spec_curve.csv",
-                "data/menu_options.csv", "data/analysts5.csv", "data/reference_marks.csv")
+                "data/menu_options.csv", "data/housing_replication.csv", "data/replication_curve.csv",
+                "data/analysts5.csv", "data/reference_marks.csv")
 for (f in data_files) {
   if (!file.exists(f)) {
     fail(paste0("data file missing: ", f, " – run from the workspace root folder"))

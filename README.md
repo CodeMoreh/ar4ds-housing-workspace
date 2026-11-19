@@ -44,14 +44,15 @@ Putting your own work under version control and publishing the rendered report i
 
 ## The tasks
 
-The report `index.qmd` holds five tasks:
+The report `index.qmd` holds six tasks:
 
 - **Task 1** – the setup check and the three Rs.
 - **Task 2** – the data, the estimand and the causal graph.
 - **Task 3** – the reproduction of one of the five analyses of the robustness study, from the public file of the original authors. `prep/reproduce_reanalyses.R` holds all five as a script.
 - **Task 4** – the specification menu, with one specification sent to the class chart as exploratory.
 - **Task 5** – one specification preregistered, then fitted, reported and placed among the 64 specifications of the curve.
-- **Going further** – four optional exercises.
+- **Task 6** – the preregistered specification fitted again on the data of the SCORE replication, a new experiment of 2020, and placed on the curve of the claim on the new data.
+- **Going further** – three optional exercises.
 
 ------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ The report `index.qmd` holds five tasks:
 - **Class chart:** https://codemoreh.github.io/ar4ds-housing/class-results.html
 - **Take-home git/GitHub path:** https://codemoreh.github.io/ar4ds/git-github.html
 - **The data:** the replication package of the original study on Harvard Dataverse, https://doi.org/10.7910/DVN/1HOVTU (CC0).
+- **The data of the SCORE replication:** the de-identified data of the new experiment on the OSF, https://osf.io/xseqg/, published without a stated licence.
 - **The five analyses of the robustness study:** the component of the robustness study for the paper on the OSF, https://osf.io/38rsh/, with one sub-component per analyst: 8PTRZ https://osf.io/j8wvh/, UYV3F https://osf.io/3672s/ (a review document only), EWFMI https://osf.io/jhvca/, 25N5D https://osf.io/v8zah/ and P9W8Y https://osf.io/pzwbm/.
 
 ------------------------------------------------------------------------
@@ -72,7 +74,7 @@ This workspace is published as the "Use this template" repository `CodeMoreh/ar4
 - `.devcontainer/devcontainer.json` – a Codespaces / dev-container image (R + Quarto + the package list) so the repository can be opened and rendered in the cloud with no local install.
 - `.github/workflows/publish.yml` – renders the report and publishes it to GitHub Pages on every push, once **Settings → Pages → Source** is set to **"GitHub Actions"**. It installs R and re-runs the chunks, so the edits of a participant show up.
 
-Neither is needed for the zip route used in class. Keep `data/` in step with the `data/` folder of the course repository. `housing_emails.csv` is what the report and the helpers read, and `housing_original.csv` is the public file of the original authors, on which the five reproductions of Task 3 run. `spec_curve.csv` is the curve of 64 specifications, against which `R/spec_tools.R` checks and places every live fit, and `menu_options.csv` gives the reason for every option that is not on the curve. `analysts5.csv` and `reference_marks.csv` record the five analyses of the robustness study and the reference marks of the curve. The codebooks beside them describe every column. The estimator in `R/spec_tools.R` is a verbatim copy of `R/_tools.R` in the course repository, which builds the curve; the configuration block at the top of that file holds the ID and entry codes of the results Form.
+Neither is needed for the zip route used in class. Keep `data/` in step with the `data/` folder of the course repository. `housing_emails.csv` is what the report and the helpers read, and `housing_original.csv` is the public file of the original authors, on which the five reproductions of Task 3 run. `spec_curve.csv` is the curve of 64 specifications, against which `R/spec_tools.R` checks and places every live fit, and `menu_options.csv` gives the reason for every option that is not on the curve. `analysts5.csv` and `reference_marks.csv` record the five analyses of the robustness study and the reference marks of the curve. `housing_replication.csv` holds the data of the SCORE replication in the columns of the course file, and `replication_curve.csv` the curve of the claim on them, which Task 6 reads. The codebooks beside them describe every column. The estimator in `R/spec_tools.R` is a verbatim copy of `R/_tools.R` in the course repository, which builds the curve; the configuration block at the top of that file holds the ID and entry codes of the results Form.
 
 ------------------------------------------------------------------------
 
@@ -84,4 +86,4 @@ Einstein, K. L., & Glick, D. M. (2017). Does race affect access to government se
 
 ------------------------------------------------------------------------
 
-*Code is MIT-licensed; prose and figures are CC BY 4.0, and the data are CC0 – see `LICENSE`.*
+*Code is MIT-licensed; prose and figures are CC BY 4.0, and the data of the original study are CC0 – see `LICENSE`. The data of the SCORE replication come from the OSF, where they were published without a stated licence.*

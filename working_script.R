@@ -1,21 +1,24 @@
 ##############################################################################
 # Title:        Working script – the exercise of the Housing case study, plain R
-# Purpose:      Tasks 1 to 5 of index.qmd, as a script you can step through in
+# Purpose:      Tasks 1 to 6 of index.qmd, as a script you can step through in
 #               the console: check the setup, look at the emails and draw the
 #               causal graph, reproduce one of the five reanalyses of the robustness study
 #               (the four with a recorded statistic come out exactly), explore
-#               the specification menu, then preregister one specification and
-#               fit and report it. Every fit is live and takes a moment.
+#               the specification menu, preregister one specification, fit and
+#               report it, and fit it again on the data of the SCORE
+#               replication. Every fit is live and takes a moment.
 # Reads:        data/housing_emails.csv (the 1,014 emails of the course file);
 #               data/housing_original.csv (the public file of the original
 #               authors); through R/spec_tools.R, data/spec_curve.csv (the
 #               curve of 64, for the place of each fit) and
 #               data/menu_options.csv (the reason for every option that is not
-#               on the curve)
+#               on the curve); data/housing_replication.csv (the data of the
+#               SCORE replication) and data/replication_curve.csv (the curve of
+#               the claim on them)
 # Writes:       – (prints results to the console; the submit helpers print a
 #               pre-filled form link)
 # Author:       Chris Moreh
-# Last updated: 2026-11-17
+# Last updated: 2026-11-19
 ##############################################################################
 
 ## ---- Task 1: the setup check ---------------------------------------------
@@ -24,7 +27,7 @@
 # reference specification (-19.97 percentage points).
 source("R/check_setup.R")
 
-# The Housing data, one row per email, and the helpers of Tasks 4 and 5.
+# The Housing data, one row per email, and the helpers of Tasks 4 to 6.
 housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
 source("R/spec_tools.R")
 
@@ -210,4 +213,49 @@ tinyplot::tinyplot(b_pp ~ rank, data = spec_curve, type = tinyplot::type_hline(h
 # your specification, ringed
 tinyplot::tinyplot(b_pp ~ rank, data = mine, type = tinyplot::type_points(clim = c(3, 3)),
                    pch = 1, cex = 3, lwd = 2.5, col = "#8b1538", add = TRUE)
+tinyplot::tinytheme()
+
+
+## ---- Task 6: the declared specification on new data --------------------
+
+# The data of the SCORE replication, a new experiment of 2020. The new
+# experiment had no Black names, no reply without a greeting code and no
+# indicator of a hard-to-find address, so replicate_spec() translates the
+# declared specification and prints each change before it fits it.
+replicate_spec(my_spec)
+
+# The curve of the original data and the curve of the new data, each ranked
+# from the most negative estimate, with your specification ringed on both
+replication_curve <- readr::read_csv("data/replication_curve.csv", show_col_types = FALSE)
+experiments <- c("Original experiment (2014)", "New experiment (2020)")
+both <- dplyr::bind_rows(
+  datawizard::data_modify(spec_curve, experiment = experiments[1]),
+  replication_curve |>
+    datawizard::data_filter(!duplicated(rep_spec)) |>
+    datawizard::data_modify(rank = rep_rank, experiment = experiments[2],
+                            emails = factor(population, levels = c("replies", "all"),
+                                            labels = c("replies only", "all delivered emails")))
+) |>
+  datawizard::data_modify(experiment = factor(experiment, levels = experiments))
+mine_both <- dplyr::bind_rows(
+  datawizard::data_modify(mine, experiment = experiments[1]),
+  replication_curve |>
+    datawizard::data_filter(comparison == my_comparison, population == my_population,
+                            uncoded == my_uncoded, model == my_model, adjust == my_adjust) |>
+    datawizard::data_modify(rank = rep_rank, experiment = experiments[2])
+) |>
+  datawizard::data_modify(experiment = factor(experiment, levels = experiments))
+
+tinyplot::tinytheme("minimal")
+tinyplot::tinyplot(b_pp ~ rank | emails, facet = ~ experiment, data = both, pch = 16,
+                   facet.args = list(free = TRUE), ylim = c(min(both$b_pp) - 1, 3),
+                   palette = c("#0e3b6a", "#2b8585"), legend = list("bottom!", title = "Emails counted"),
+                   xlab = "Specifications, from the most negative estimate",
+                   ylab = "Hispanic minus comparison names (points)")
+tinyplot::tinyplot(b_pp ~ rank, facet = ~ experiment, data = both, type = tinyplot::type_hline(h = 0),
+                   col = "grey60", facet.args = list(free = TRUE), add = TRUE)
+# your specification, ringed on each curve; on the new data, its translation
+tinyplot::tinyplot(b_pp ~ rank, facet = ~ experiment, data = mine_both,
+                   type = tinyplot::type_points(clim = c(3, 3)), pch = 1, cex = 3, lwd = 2.5,
+                   col = "#8b1538", facet.args = list(free = TRUE), add = TRUE)
 tinyplot::tinytheme()
