@@ -36,5 +36,5 @@ Harvard Dataverse (doi:10.7910/DVN/1HOVTU), which is released under CC0:
 housing_original.csv is its public data file, and housing_emails.csv and the
 other files in data/ are derived from it. The exceptions are
 housing_replication.csv and replication_curve.csv, which come from the
-de-identified data of the SCORE replication of the study, published on the OSF
-(osf.io/xseqg) without a stated licence.
+de-identified data of the replication of the study in the SCORE replicability
+study, published on the OSF (osf.io/xseqg) without a stated licence.

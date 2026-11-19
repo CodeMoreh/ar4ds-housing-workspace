@@ -5,15 +5,16 @@
 #               causal graph, reproduce one of the five reanalyses of the robustness study
 #               (the four with a recorded statistic come out exactly), explore
 #               the specification menu, preregister one specification, fit and
-#               report it, and fit it again on the data of the SCORE
-#               replication. Every fit is live and takes a moment.
+#               report it, and fit it again on the data of the replication
+#               of the paper in the SCORE replicability study. Every fit is
+#               live and takes a moment.
 # Reads:        data/housing_emails.csv (the 1,014 emails of the course file);
 #               data/housing_original.csv (the public file of the original
 #               authors); through R/spec_tools.R, data/spec_curve.csv (the
 #               curve of 64, for the place of each fit) and
 #               data/menu_options.csv (the reason for every option that is not
 #               on the curve); data/housing_replication.csv (the data of the
-#               SCORE replication) and data/replication_curve.csv (the curve of
+#               replication) and data/replication_curve.csv (the curve of
 #               the claim on them)
 # Writes:       – (prints results to the console; the submit helpers print a
 #               pre-filled form link)
@@ -218,7 +219,7 @@ tinyplot::tinytheme()
 
 ## ---- Task 6: the declared specification on new data --------------------
 
-# The data of the SCORE replication, a new experiment of 2020. The new
+# The data of the replication, a new experiment of 2020. The new
 # experiment had no Black names, no reply without a greeting code and no
 # indicator of a hard-to-find address, so replicate_spec() translates the
 # declared specification and prints each change before it fits it.
