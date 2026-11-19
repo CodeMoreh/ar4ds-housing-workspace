@@ -24,8 +24,7 @@
 
 ## ---- Task 1: the setup check ---------------------------------------------
 
-# Prints an [OK] line per check, ending with the reproduction of the
-# reference specification (-19.97 percentage points).
+# An [OK] line per check, the last at -19.97 percentage points.
 source("R/check_setup.R")
 
 # The Housing data, one row per email, and the helpers of Tasks 4 to 6.
@@ -71,9 +70,8 @@ dagitty::paths(dag, Z = c("reply", "community"))
 
 ## ---- Task 3: reproduce one of the five reanalyses ------------------------
 
-# Choose one of the five analysts and run their section. Each reproduces the
-# analysis from the public file of the original authors, with the value
-# recorded in the robustness study beside it.
+# One section for each analyst, from the public file of the original authors,
+# with the value recorded in the robustness study.
 original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
 
 # 8PTRZ: Hispanic against all other names among the 558 replies with a
@@ -122,8 +120,8 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails)                   # X-squ
 prop.test(counts_25n5d$greetings, counts_25n5d$emails, correct = FALSE)  # X-squared = 14.334
 
 # P9W8Y: the three groups among the 558 coded replies, a likelihood-ratio
-# test of the groups. The robustness study recorded no statistic, so there is nothing to
-# match; the report of the analyst gives chi-square = 15.951 on 2 df.
+# test of the groups. No statistic recorded in the robustness study; the
+# report of the analyst gives chi-square = 15.951 on 2 df.
 replies_p9w8y <- original |>
   datawizard::data_filter(!is.na(ProperName)) |>
   datawizard::data_separate(select = "TreatmentGroup", new_columns = c("ethnicity", "name_sex"),
@@ -135,10 +133,8 @@ anova(update(m_p9w8y, . ~ 1), m_p9w8y, test = "LRT")
 
 ## ---- Task 4: work the menu ------------------------------------------------
 
-# try_spec() takes one argument per decision of the menu, and every one
-# defaults to the reference specification, so changing one thing means
-# changing one argument. The first five are the decisions on which the curve
-# keeps more than one option.
+# One argument per decision of the menu, each defaulting to the reference
+# specification; the first five vary on the curve.
 try_spec()                                # the raw gap of the paper
 try_spec(comparison = "nonhispanic")      # Hispanic names against white and Black names together
 try_spec(population = "all")              # every delivered email, no reply counted as no greeting
@@ -146,20 +142,16 @@ try_spec(uncoded    = "not_named")        # the five uncoded replies counted as 
 try_spec(model      = "logit")            # the model of the paper, as an average marginal effect
 try_spec(adjust     = "place_ethnic")     # the covariates of the original model, in thirds
 
-# Options that are not on the curve are refused with the reason why and the
-# page of the course site that teaches them; try() prints the refusal and lets
-# the rest of the script run.
+# An option off the curve is refused with its reason; try() prints the refusal
+# and the script runs on.
 try(try_spec(model = "three_group"))      # all three groups in one model
 try(try_spec(outcome = "reply"))          # any reply, a different claim
 
-# The running log of everything you have tried. Only the decisions that
-# varied are printed.
+# The log of every specification tried, with the decisions that varied.
 my_experiments()
 
-# Send the most recent one to the class chart, where it is labelled
-# exploratory and carries the tag that the function prints and keeps in
-# .class-tag; submit_exploration(nickname = "...") sets your own (a nickname,
-# not your name).
+# The last specification tried to the class chart, labelled exploratory, with
+# the tag kept in .class-tag; nickname = "..." sets another (not your name).
 submit_exploration()
 
 ## ---- Task 5: preregister one specification --------------------------------
@@ -190,8 +182,8 @@ my_spec <- prereg()   # checks every choice, prints your preregistration and kee
 
 run_spec(my_spec)
 
-# report_result() works from the preregistration and reuses the tag from
-# Task 4. Open the printed link and press Send.
+# The preregistered specification to the class chart, with the tag of Task 4;
+# open the printed address and press Send.
 report_result()
 
 # Your result among the 64 specifications of the curve.
@@ -219,10 +211,8 @@ tinyplot::tinytheme()
 
 ## ---- Task 6: the declared specification on new data --------------------
 
-# The data of the replication, a new experiment of 2020. The new
-# experiment had no Black names, no reply without a greeting code and no
-# indicator of a hard-to-find address, so replicate_spec() translates the
-# declared specification and prints each change before it fits it.
+# The declared specification on the data of the replication, a new experiment
+# of 2020, translated where the new experiment differs; each change is printed.
 replicate_spec(my_spec)
 
 # The curve of the original data and the curve of the new data, each ranked

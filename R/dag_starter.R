@@ -9,11 +9,11 @@
 #               switch on. Then ask dagitty which paths from the name to the
 #               greeting stay open when the comparison is made among replies.
 # Author:       Chris Moreh
-# Last updated: 2026-11-15
+# Last updated: 2026-11-19
 # Sourced by:   index.qmd and working_script.R (Task 2)
 ##############################################################################
 
-# Three terms on which the task depends:
+# Three terms of the task:
 #   confounder – a common cause of the name and the greeting. The names were
 #                assigned by a random number generator, so nothing causes the
 #                name and there is no confounder to adjust for.
@@ -26,14 +26,11 @@
 #                collider opens a path between its causes.
 
 # ---- The graph -------------------------------------------------------------
-# A dagitty graph from its model string, one statement to a line: first the
-# variables, with the roles that the questions of the report need and the
-# place of each in the figure (the name on the left, the greeting on the
-# right, the reply above the line between them; dagitty counts y downwards, so
-# the heights carry a minus sign), then the arrows, each written
-# "cause -> effect". The lines are joined into one string, so that a # in
-# front of a line switches its arrow off. A variable that you add in an arrow
-# alone is drawn on a row below the graph.
+# A dagitty model string, one statement to a line: the variables, with their
+# roles and their places in the figure (dagitty counts y downwards, so the
+# heights carry a minus sign), then the arrows, "cause -> effect". A # in front
+# of a line switches its arrow off. A variable added only in an arrow is drawn
+# on a row below the graph.
 dag <- c(
   "dag {",
   'name [exposure,pos="0,0"]',
@@ -69,8 +66,7 @@ dag <- c(
 # ---- The figure ------------------------------------------------------------
 # Colour marks the exposure and the outcome, and the official, whom nobody
 # observed, is drawn pale. Each arrow stops near the edge of the box of its
-# target, which is sized from the length of the name. Drawn with tinyplot
-# (McDermott, Arel-Bundock and Zeileis; CRAN, doi:10.32614/CRAN.package.tinyplot).
+# target, sized from the length of the name.
 plot_dag <- function(d = dag) {
   xy <- dagitty::coordinates(d)
   nodes <- tibble::tibble(name = names(xy$x), x = unname(xy$x), y = -unname(xy$y)) |>

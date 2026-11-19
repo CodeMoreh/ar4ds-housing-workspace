@@ -14,7 +14,7 @@
 #               authors, Harvard Dataverse doi:10.7910/DVN/1HOVTU, CC0)
 # Writes:       – (prints the tests)
 # Author:       Chris Moreh
-# Last updated: 2026-11-15
+# Last updated: 2026-11-19
 ##############################################################################
 
 original <- readr::read_csv("data/housing_original.csv", show_col_types = FALSE)
@@ -78,9 +78,9 @@ prop.test(counts_25n5d$greetings, counts_25n5d$emails, correct = FALSE)  # X-squ
 
 # ---- P9W8Y: a test of three groups -------------------------------------------
 # The three groups among the coded replies, and the likelihood-ratio test of
-# the groups against a model without them. The robustness study recorded no statistic for
-# this analysis, so there is nothing on record to match; the report that the
-# analyst filed gives chi-square = 15.951 on 2 df.
+# the groups against a model without them. The robustness study recorded no
+# statistic for this analysis; the report of the analyst gives chi-square =
+# 15.951 on 2 df.
 replies_p9w8y <- original |>
   datawizard::data_filter(!is.na(ProperName)) |>
   datawizard::data_separate(select = "TreatmentGroup", new_columns = c("ethnicity", "name_sex"),

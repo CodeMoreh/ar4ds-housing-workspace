@@ -21,8 +21,7 @@ knitr:
 #| label: setup
 #| include: false
 
-# If a package is missing, run R/check_setup.R: it names the package and
-# prints the line that installs it.
+# A missing package: R/check_setup.R names it and prints the install line.
 
 # The Housing data, one row per email.
 housing <- readr::read_csv("data/housing_emails.csv", show_col_types = FALSE)
