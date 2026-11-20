@@ -2,7 +2,7 @@ project:
   type: website
   output-dir: _site
   # The report is the only page. The codebooks in data/ stay Markdown files,
-  # read as they are; some of them link to codebooks of the workshop site.
+  # read as they are; some of them link to codebooks on the workshop's website.
   render:
     - index.qmd
 

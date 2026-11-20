@@ -2,7 +2,7 @@
 # Title:        check_setup.R – does this machine have what the workshop needs?
 # Purpose:      Report the R version, Quarto, the required packages, whether
 #               the data files are present and readable, and whether the
-#               estimator of the workshop reproduces the reference
+#               workshop's estimator reproduces the reference
 #               specification (-19.97 percentage points). Prints an [OK] /
 #               [FAIL] / [SKIP] line per check and a verdict, and a [NOTE]
 #               where a package is at another version than the workshop was
@@ -54,7 +54,7 @@ if (nzchar(qv) && !grepl("not found|error", qv, ignore.case = TRUE)) {
 # rmarkdown, Quarto runs no R chunk of the report.
 needed <- c("dplyr", "purrr", "readr", "tibble", "datawizard", "parameters", "sandwich",
             "marginaleffects", "effectsize", "tinyplot", "dagitty", "rmarkdown")
-# The copy of CRAN on the package date of the workshop, kept by the public
+# The copy of CRAN on the workshop's package date, kept by the public
 # package manager of Posit; the install lines take the packages from it.
 course_repo <- "https://packagemanager.posit.co/cran/2026-11-17"
 install_line <- '          install.packages(c("%s"), repos = "%s")'
@@ -75,17 +75,17 @@ tested <- tryCatch(
   error = function(e) NULL, warning = function(w) NULL
 )
 if (length(present) == 0 || is.null(tested)) {
-  skip("package versions not compared with those of the workshop (no connection)")
+  skip("package versions not compared with the workshop's (no connection)")
 } else {
   differ <- present[vapply(present, function(p) utils::packageVersion(p) != tested[[p]], logical(1))]
   if (length(differ) == 0) {
-    ok(paste0(length(present), " packages at the versions of the workshop"))
+    ok(paste0(length(present), " packages at the workshop's versions"))
   } else {
     writeLines(c(
       paste0("[NOTE] ", length(differ), " package(s) at another version than the workshop:"),
       paste0("        ", differ, " ", vapply(differ, function(p) as.character(utils::packageVersion(p)), character(1)),
              " (the workshop: ", tested[differ], ")"),
-      "        if an exercise fails, install the versions of the workshop:",
+      "        if an exercise fails, install the workshop's versions:",
       sprintf(install_line, paste(differ, collapse = '", "'), course_repo)
     ))
   }

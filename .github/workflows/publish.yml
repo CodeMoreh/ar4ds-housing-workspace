@@ -31,7 +31,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     env:
-      # The copy of CRAN of the package date of the workshop, the address that
+      # The copy of CRAN of the workshop's package date, the address that
       # R/check_setup.R prints, as binaries for this version of Ubuntu.
       RSPM: https://packagemanager.posit.co/cran/__linux__/noble/2026-11-17
       CRAN: https://packagemanager.posit.co/cran/2026-11-17

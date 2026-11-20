@@ -8,7 +8,7 @@
 #               report it, and fit it again on the data of the replication
 #               of the paper in the SCORE replicability study. Every fit is
 #               live and takes a moment.
-# Reads:        data/housing_emails.csv (the 1,014 emails of the workshop file);
+# Reads:        data/housing_emails.csv (the 1,014 emails of the analysis file);
 #               data/housing_original.csv (the public file of the original
 #               authors); through R/spec_tools.R, data/spec_curve.csv (the
 #               curve of 64, for the place of each fit) and

@@ -38,7 +38,7 @@ This workspace is a plain folder, with no version control and no account to sign
 
 ## A note on version control
 
-Putting your own work under version control and publishing the rendered report is the natural next step, and the module **Git and GitHub for reproducible research** on the workshop site goes through it: <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders of this workspace set up that route once the folder is a repository again, and you can ignore them until then.
+Putting your own work under version control and publishing the rendered report is the natural next step, and the module **Git and GitHub for reproducible research** on the workshop's website goes through it: <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders of this workspace set up that route once the folder is a repository again, and you can ignore them until then.
 
 ------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ The report `index.qmd` holds six tasks:
 
 ## Links
 
-- **Workshop site:** https://codemoreh.github.io/ar4ds-housing/
+- **Website:** https://codemoreh.github.io/ar4ds-housing/
 - **Class chart:** https://codemoreh.github.io/ar4ds-housing/class-results.html
 - **Take-home git/GitHub path:** https://codemoreh.github.io/ar4ds/git-github.html
 - **The data:** the replication package of the original study on Harvard Dataverse, https://doi.org/10.7910/DVN/1HOVTU (CC0).
@@ -74,7 +74,7 @@ This workspace is published as the "Use this template" repository `CodeMoreh/ar4
 - `.devcontainer/devcontainer.json` – a Codespaces / dev-container image (R + Quarto + the package list) so the repository can be opened and rendered in the cloud with no local install.
 - `.github/workflows/publish.yml` – renders the report and publishes it to GitHub Pages on every push, once **Settings → Pages → Source** is set to **"GitHub Actions"**. It installs R and re-runs the chunks, so the edits of a participant show up.
 
-Neither is needed for the zip route used in class. Keep `data/` in step with the `data/` folder of the workshop repository. `housing_emails.csv` is what the report and the helpers read, and `housing_original.csv` is the public file of the original authors, on which the five reproductions of Task 3 run. `spec_curve.csv` is the curve of 64 specifications, against which `R/spec_tools.R` checks and places every live fit, and `menu_options.csv` gives the reason for every option that is not on the curve. `analysts5.csv` and `reference_marks.csv` record the five analyses of the robustness study and the reference marks of the curve. `housing_replication.csv` holds the data of the replication in the columns of the workshop file, and `replication_curve.csv` the curve of the claim on them, which Task 6 reads. The codebooks beside them describe every column. The estimator in `R/spec_tools.R` is a verbatim copy of `R/_tools.R` in the workshop repository, which builds the curve; the configuration block at the top of that file holds the ID and entry codes of the results Form.
+Neither is needed for the zip route used in class. Keep `data/` in step with the `data/` folder of the workshop's GitHub repository. `housing_emails.csv` is what the report and the helpers read, and `housing_original.csv` is the public file of the original authors, on which the five reproductions of Task 3 run. `spec_curve.csv` is the curve of 64 specifications, against which `R/spec_tools.R` checks and places every live fit, and `menu_options.csv` gives the reason for every option that is not on the curve. `analysts5.csv` and `reference_marks.csv` record the five analyses of the robustness study and the reference marks of the curve. `housing_replication.csv` holds the data of the replication in the columns of the analysis file, and `replication_curve.csv` the curve of the claim on them, which Task 6 reads. The codebooks beside them describe every column. The estimator in `R/spec_tools.R` is a verbatim copy of `R/_tools.R` in the workshop's GitHub repository, which builds the curve; the configuration block at the top of that file holds the ID and entry codes of the results Form.
 
 ------------------------------------------------------------------------
 

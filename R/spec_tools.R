@@ -16,7 +16,7 @@
 #               The menu has eleven decisions, and the curve of the claim
 #               keeps 64 specifications of them. An option that is not on the
 #               curve stops with the reason recorded in data/menu_options.csv
-#               and the page of the workshop site that teaches it. Every
+#               and the page on the workshop's website that teaches it. Every
 #               specification is fitted live by fit_spec(), the estimator that
 #               built the curve, and placed among the 64 of
 #               data/spec_curve.csv. The fits use parameters, sandwich,
@@ -28,7 +28,7 @@
 ##############################################################################
 
 # ============================================================================
-# CONFIGURATION – the class chart and the workshop site
+# CONFIGURATION – the class chart and the workshop's website
 # ============================================================================
 # The results Form pre-filled by submit_exploration() and report_result(): its
 # ID and the entry codes of its seven fields, shared by the workshop; a Form of
@@ -44,11 +44,11 @@
 
 
 # ---- The estimator -------------------------------------------------------------
-# A verbatim copy of R/_tools.R in the workshop repository, which builds
-# the curve; the browser lab of the workshop site carries the same copy.
+# A verbatim copy of R/_tools.R in the workshop's GitHub repository, which builds
+# the curve; the browser lab on the workshop's website carries the same copy.
 
-# The workspace, the browser lab and the pipeline of the workshop site run the
-# same code. R/check_parity.R in the workshop repository checks the HC2 errors
+# The workspace, the browser lab and the workshop's pipeline run the
+# same code. R/check_parity.R in the workshop's GitHub repository checks the HC2 errors
 # and the average marginal effect against estimatr and margins.
 
 # The options of the curve, in menu order. Anything else is refused by
@@ -216,7 +216,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
 .options <- function() .read_once("options", "data/menu_options.csv")
 
 
-# ---- Pages of the workshop site ----------------------------------------------------
+# ---- Pages on the workshop's website ----------------------------------------------------
 .pages <- c(
   "background.qmd"                = "Background",
   "menu.qmd"                      = "Specification menu",
@@ -302,10 +302,10 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
                           .data$uncoded == ch$uncoded, .data$model == ch$model,
                           .data$adjust == ch$adjust)
   if (nrow(stored) != 1) {
-    warning("This specification has no row in data/spec_curve.csv; restore the file from the workshop repository.",
+    warning("This specification has no row in data/spec_curve.csv; restore the file from the workshop's GitHub repository.",
             call. = FALSE)
   } else if (abs(fit$b_pp - stored$b_pp) > 1e-6 || abs(fit$stat - stored$stat) > 1e-6) {
-    warning(sprintf("The fit (%.4f points, %s = %.4f) differs from data/spec_curve.csv (%.4f points, %s = %.4f). Restore data/ from the workshop repository.",
+    warning(sprintf("The fit (%.4f points, %s = %.4f) differs from data/spec_curve.csv (%.4f points, %s = %.4f). Restore data/ from the workshop's GitHub repository.",
                     fit$b_pp, fit$stat_type, fit$stat, stored$b_pp, fit$stat_type, stored$stat),
             call. = FALSE)
   }
@@ -488,7 +488,7 @@ replicate_spec <- function(spec) {
   stored <- dplyr::filter(curve, .data$comparison == ch$comparison, .data$population == ch$population,
                           .data$uncoded == ch$uncoded, .data$model == ch$model, .data$adjust == ch$adjust)
   if (nrow(stored) != 1 || abs(fit$b_pp - stored$b_pp) > 1e-6)
-    warning("The fit on the new data differs from data/replication_curve.csv. Restore data/ from the workshop repository.",
+    warning("The fit on the new data differs from data/replication_curve.csv. Restore data/ from the workshop's GitHub repository.",
             call. = FALSE)
   distinct <- dplyr::filter(curve, !duplicated(.data$rep_spec))
   .print_result(ch, .result(ch), "Declared specification on the original data:")

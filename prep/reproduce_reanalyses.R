@@ -6,8 +6,8 @@
 #               UYV3F (z = -3.771 on 362), EWFMI (z = 3.645 on 549) and 25N5D
 #               (chi-square = 13.683 on 665 emails); P9W8Y has no recorded
 #               statistic, and its likelihood-ratio test gives 15.951 on 2 df.
-#               The same functions compute the refits of the workshop pipeline
-#               (R/03_reference_marks.R in the workshop repository). The
+#               The same functions compute the refits in the workshop's pipeline
+#               (R/03_reference_marks.R in the workshop's GitHub repository). The
 #               scripts of the analysts are on the OSF (all five under
 #               osf.io/38rsh) and are not copied here.
 # Reads:        data/housing_original.csv (the public file of the original
