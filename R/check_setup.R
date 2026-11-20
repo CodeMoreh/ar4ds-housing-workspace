@@ -32,7 +32,7 @@ sys_out <- function(cmd, args) {
   if (length(out) == 0) "" else trimws(paste(out, collapse = " "))
 }
 
-writeLines("\n=== AR4DS workspace, the Housing and racial bias case study – setup check ===\n")
+writeLines("\n=== AR4DS IDE workspace, the Housing and racial bias case study – setup check ===\n")
 
 # --- 1. R version -----------------------------------------------------------
 if (getRversion() >= "4.4.0") {
@@ -92,13 +92,13 @@ if (length(present) == 0 || is.null(tested)) {
 }
 
 # --- 4. data files present and readable -------------------------------------
-# The data files of the report, which ship with the workspace.
+# The data files of the report, which ship with the IDE workspace.
 data_files <- c("data/housing_emails.csv", "data/housing_original.csv", "data/spec_curve.csv",
                 "data/menu_options.csv", "data/housing_replication.csv", "data/replication_curve.csv",
                 "data/analysts5.csv", "data/reference_marks.csv")
 for (f in data_files) {
   if (!file.exists(f)) {
-    fail(paste0("data file missing: ", f, " – run from the workspace root folder"))
+    fail(paste0("data file missing: ", f, " – run from the root folder of the IDE workspace"))
     next
   }
   n_rows <- tryCatch(nrow(utils::read.csv(f)), error = function(e) NA_integer_)
@@ -113,7 +113,7 @@ for (f in data_files) {
 if (file.exists("index.qmd")) {
   ok("index.qmd present")
 } else {
-  fail("index.qmd not found – run this from the workspace root folder")
+  fail("index.qmd not found – run this from the root folder of the IDE workspace")
 }
 
 # --- 6. the estimator reproduces the reference specification ----------------
@@ -132,7 +132,7 @@ if (length(missing) == 0 && all(file.exists(data_files[c(1, 3)])) && file.exists
   } else {
     fail(paste0("the reference specification does not reproduce",
                 if (!is.null(check$msg)) paste0(" (", check$msg, ")"),
-                " – restore R/ and data/ from a fresh download of the workspace"))
+                " – restore R/ and data/ from a fresh download of the IDE workspace"))
   }
 } else {
   skip("the reproduction check needs the packages, R/spec_tools.R and the data files above")
@@ -147,7 +147,7 @@ if (.results$fail == 0) {
 } else {
   writeLines(c("\nFix each FAIL as its line says, then run this script again.",
                "Common failures and fixes: https://codemoreh.github.io/ar4ds/help.html",
-               "Without a working installation, the browser lab runs every task:",
+               "Without a working installation, the webR workspace runs every task:",
                "https://codemoreh.github.io/ar4ds-housing/lab.html",
                ""))
 }

@@ -340,7 +340,7 @@ try_spec(model = "three_group")          # all three groups in one model: refuse
 my_experiments()
 ```
 
-When you have tried three or four, decide which one you would defend, run it once more so that it is the most recent, and submit it. It appears on the live class chart as an open circle, labelled **exploratory**, with the tag that `submit_exploration()` prints, such as `amber-otter-42`. The tag is kept in the file `.class-tag` of this workspace, your declared result in Task 5 carries the same one, and it is how you find your own marks on the chart. To choose your own, write `submit_exploration(nickname = "...")` with a nickname rather than your name, because the chart is public:
+When you have tried three or four, decide which one you would defend, run it once more so that it is the most recent, and submit it. It appears on the live class chart as an open circle, labelled **exploratory**, with the tag that `submit_exploration()` prints, such as `amber-otter-42`. The tag is kept in the file `.class-tag` of this IDE workspace, your declared result in Task 5 carries the same one, and it is how you find your own marks on the chart. To choose your own, write `submit_exploration(nickname = "...")` with a nickname rather than your name, because the chart is public:
 
 ```{r}
 #| label: submit-exploration
@@ -510,11 +510,11 @@ On the new data the 12 estimates lie between −1.6 and +0.5 points, and none is
 ------------------------------------------------------------------------
 
 ::: {.callout-note title="Taking it home"}
-Putting your own work under version control and publishing the rendered report is the natural next step, and the module [Git and GitHub for reproducible research](https://codemoreh.github.io/ar4ds/git-github.html) on the workshop's website goes through it. The `.github/` and `.devcontainer/` folders of this workspace set up that route once the folder is a repository again.
+Putting your own work under version control and publishing the rendered report is the natural next step, and the module [Git and GitHub for reproducible research](https://codemoreh.github.io/ar4ds/git-github.html) on the workshop's website goes through it. The `.github/` and `.devcontainer/` folders of this IDE workspace set up that route once the folder is a repository again.
 :::
 
 ::: {.callout-note title="Going further (optional)"}
-Each of these runs in this workspace.
+Each of these runs in this IDE workspace.
 
 - **Sweep a whole decision.** `purrr::walk(c("none", "email", "place", "place_ethnic"), \(a) try_spec(adjust = a))` fits the four adjustment sets in one go, and `my_experiments()` then prints them side by side. The same call works for any decision on which the curve keeps more than one option.
 

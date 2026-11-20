@@ -1,6 +1,6 @@
-# AR4DS workspace – Housing and racial bias
+# AR4DS IDE workspace – Housing and racial bias
 
-## About this workspace
+## About this IDE workspace
 
 A ready-to-run replication exercise for the workshop "Applied Replication for Data Skills". You reproduce one of the reanalyses from the SCORE robustness study (Aczel et al. 2026) and test the robustness of a published claim: that emails to public housing authorities signed with Hispanic names were less likely to be answered with a greeting by name than emails signed with white names (Einstein and Glick 2017). You are analyst no. 6.
 
@@ -8,11 +8,11 @@ The report you build is `index.qmd`. It renders out of the box: the data ship in
 
 ------------------------------------------------------------------------
 
-## Setting up the workspace
+## Setting up the IDE workspace
 
-This workspace is a plain folder, with no version control and no account to sign in to. You download it, unzip it, and work inside it.
+This IDE workspace is a plain folder, with no version control and no account to sign in to. You download it, unzip it, and work inside it.
 
-1.  **Download the workspace.** On the GitHub page of the template, click the green **Code** button, then **Download ZIP** – or use the direct link `https://github.com/CodeMoreh/ar4ds-housing-workspace/archive/refs/heads/main.zip`. Save it somewhere you own (Desktop or Documents).
+1.  **Download the IDE workspace.** On the GitHub page of the template, click the green **Code** button, then **Download ZIP** – or use the direct link `https://github.com/CodeMoreh/ar4ds-housing-workspace/archive/refs/heads/main.zip`. Save it somewhere you own (Desktop or Documents).
 
 2.  **Unzip it.** Extract the ZIP to a real folder (on Windows, "Extract All" – do not work inside the compressed preview). You will get a folder called `ar4ds-housing-workspace-main` containing `index.qmd`, `data/`, `R/`, and this file.
 
@@ -38,7 +38,7 @@ This workspace is a plain folder, with no version control and no account to sign
 
 ## A note on version control
 
-Putting your own work under version control and publishing the rendered report is the natural next step, and the module **Git and GitHub for reproducible research** on the workshop's website goes through it: <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders of this workspace set up that route once the folder is a repository again, and you can ignore them until then.
+Putting your own work under version control and publishing the rendered report is the natural next step, and the module **Git and GitHub for reproducible research** on the workshop's website goes through it: <https://codemoreh.github.io/ar4ds/git-github.html>. The `.github/` and `.devcontainer/` folders of this IDE workspace set up that route once the folder is a repository again, and you can ignore them until then.
 
 ------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ The report `index.qmd` holds six tasks:
 
 ## Notes for the repository maintainer
 
-This workspace is published as the "Use this template" repository `CodeMoreh/ar4ds-housing-workspace`. Two folders serve the take-home and publishing route:
+This IDE workspace is published as the "Use this template" repository `CodeMoreh/ar4ds-housing-workspace`. Two folders serve the take-home and publishing route:
 
 - `.devcontainer/devcontainer.json` – a Codespaces / dev-container image (R + Quarto + the package list) so the repository can be opened and rendered in the cloud with no local install.
 - `.github/workflows/publish.yml` – renders the report and publishes it to GitHub Pages on every push, once **Settings → Pages → Source** is set to **"GitHub Actions"**. It installs R and re-runs the chunks, so the edits of a participant show up.

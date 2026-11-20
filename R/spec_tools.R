@@ -45,9 +45,9 @@
 
 # ---- The estimator -------------------------------------------------------------
 # A verbatim copy of R/_tools.R in the workshop's GitHub repository, which builds
-# the curve; the browser lab on the workshop's website carries the same copy.
+# the curve; the webR workspace on the workshop's website carries the same copy.
 
-# The workspace, the browser lab and the workshop's pipeline run the
+# The IDE workspace, the webR workspace and the workshop's pipeline run the
 # same code. R/check_parity.R in the workshop's GitHub repository checks the HC2 errors
 # and the average marginal effect against estimatr and margins.
 
@@ -203,7 +203,7 @@ spec_line <- function(comparison, population, uncoded, model, adjust) {
 .read_once <- function(name, path) {
   if (is.null(.cache[[name]])) {
     if (!file.exists(path))
-      stop(sprintf("%s not found. Run from the root folder of the workspace.",
+      stop(sprintf("%s not found. Run from the root folder of the IDE workspace.",
                    path), call. = FALSE)
     assign(name, utils::read.csv(path, stringsAsFactors = FALSE, encoding = "UTF-8",
                                  na.strings = c("", "NA")),
@@ -503,7 +503,7 @@ replicate_spec <- function(spec) {
 # Both submissions carry one tag inside the spec label, "explore:
 # [amber-otter-42] housing …", by which a participant finds their marks on the
 # class chart; the label carries it because the Form is shared. The tag is kept
-# in .class-tag at the root of the workspace, across sessions, and a nickname
+# in .class-tag at the root of the IDE workspace, across sessions, and a nickname
 # passed to either submission function replaces it.
 .tag_words <- list(
   adj  = c("amber", "azure", "bright", "calm", "coral", "crisp", "dusky", "early",
@@ -542,7 +542,7 @@ replicate_spec <- function(spec) {
   x
 }
 
-# The tag of this workspace: the nickname if one is given, otherwise the stored
+# The tag of this IDE workspace: the nickname if one is given, otherwise the stored
 # tag, otherwise a fresh one. Returns the tag and the one it replaced, if any.
 .class_tag <- function(nickname = NULL) {
   stored <- if (file.exists(.tag_file))
