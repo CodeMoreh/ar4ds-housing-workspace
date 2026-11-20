@@ -7,7 +7,7 @@ project:
     - index.qmd
 
 website:
-  title: "AR4DS workspace – Housing and racial bias"
+  title: "AR4DS IDE workspace – Housing and racial bias"
 
 # freeze: auto means a whole-project render re-runs a document (every chunk in it)
 # only when its source file has changed. The committed _freeze/ folder lets
