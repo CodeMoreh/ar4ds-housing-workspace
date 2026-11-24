@@ -9,7 +9,7 @@
 #               tested with. It changes nothing on the system. Base R up to
 #               the last check, which runs before any package is installed.
 # Author:       Chris Moreh
-# Last updated: 2026-11-19
+# Last updated: 2026-11-24
 # Sourced by:   the participant (source("R/check_setup.R"))
 ##############################################################################
 
@@ -50,17 +50,17 @@ if (nzchar(qv) && !grepl("not found|error", qv, ignore.case = TRUE)) {
 }
 
 # --- 3. packages ------------------------------------------------------------
-# The packages of the estimator, the report and the causal graph; without
-# rmarkdown, Quarto runs no R chunk of the report.
+# The packages of the estimator, the report, the tables and the causal graph;
+# without rmarkdown, Quarto runs no R chunk of the report.
 needed <- c("dplyr", "purrr", "readr", "tibble", "datawizard", "parameters", "sandwich",
-            "marginaleffects", "effectsize", "tinyplot", "dagitty", "rmarkdown")
+            "marginaleffects", "effectsize", "tinyplot", "tinytable", "dagitty", "rmarkdown")
 # The copy of CRAN on the workshop's package date, kept by the public
 # package manager of Posit; the install lines take the packages from it.
 course_repo <- "https://packagemanager.posit.co/cran/2026-11-17"
 install_line <- '          install.packages(c("%s"), repos = "%s")'
 missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing) == 0) {
-  ok(paste0("all ", length(needed), " required packages installed"))
+  ok("required packages installed")
 } else {
   fail(paste0("missing package(s): ", paste(missing, collapse = ", ")))
   writeLines(c("        install with:",
@@ -79,10 +79,10 @@ if (length(present) == 0 || is.null(tested)) {
 } else {
   differ <- present[vapply(present, function(p) utils::packageVersion(p) != tested[[p]], logical(1))]
   if (length(differ) == 0) {
-    ok(paste0(length(present), " packages at the workshop's versions"))
+    ok("packages at the workshop's versions")
   } else {
     writeLines(c(
-      paste0("[NOTE] ", length(differ), " package(s) at another version than the workshop:"),
+      "[NOTE] packages at another version than the workshop's:",
       paste0("        ", differ, " ", vapply(differ, function(p) as.character(utils::packageVersion(p)), character(1)),
              " (the workshop: ", tested[differ], ")"),
       "        if an exercise fails, install the workshop's versions:",

@@ -24,7 +24,7 @@ This IDE workspace is a plain folder, with no version control and no account to 
     source("R/check_setup.R")
     ```
 
-    It prints an `[OK]`, `[FAIL]` or `[SKIP]` line per check (R version, Quarto, the twelve required packages, the data files, and a fit of the reference specification, which must come out at −19.97 percentage points), and a `[NOTE]` that names any package installed at another version than the workshop was tested with. If any packages are missing, it prints the one line that installs them. Run that line, then re-run the check.
+    It prints an `[OK]`, `[FAIL]` or `[SKIP]` line per check (R version, Quarto, the required packages, the data files, and a fit of the reference specification, which must come out at −19.97 percentage points), and a `[NOTE]` that names any package installed at another version than the workshop was tested with. If any packages are missing, it prints the one line that installs them. Run that line, then re-run the check.
 
 5.  **Open the report and preview it.** Open `index.qmd`, then in a terminal inside your IDE:
 

@@ -6,7 +6,7 @@
       "version": "1.11.9"
     }
   },
-  "postCreateCommand": "Rscript -e \"os <- readLines('/etc/os-release'); codename <- sub('VERSION_CODENAME=', '', grep('^VERSION_CODENAME=', os, value = TRUE)); options(repos = c(CRAN = sprintf('https://packagemanager.posit.co/cran/__linux__/%s/2026-11-17', codename))); install.packages('pak'); pak::pak(c('dplyr','purrr','readr','tibble','datawizard','parameters','sandwich','marginaleffects','effectsize','tinyplot','dagitty','rmarkdown'))\"",
+  "postCreateCommand": "Rscript -e \"os <- readLines('/etc/os-release'); codename <- sub('VERSION_CODENAME=', '', grep('^VERSION_CODENAME=', os, value = TRUE)); options(repos = c(CRAN = sprintf('https://packagemanager.posit.co/cran/__linux__/%s/2026-11-17', codename))); install.packages('pak'); pak::pak(c('dplyr','purrr','readr','tibble','datawizard','parameters','sandwich','marginaleffects','effectsize','tinyplot','tinytable','dagitty','rmarkdown'))\"",
   "customizations": {
     "vscode": {
       "extensions": [
